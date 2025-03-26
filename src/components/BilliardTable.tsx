@@ -46,6 +46,7 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
       
       // Set zones if refs are available
       if (goldZoneRef.current && redZoneRef.current && blueZoneRef.current) {
+        // Order is important: largest to smallest for proper stacking
         const zones: Zone[] = [
           { 
             element: blueZoneRef.current, 
@@ -62,7 +63,7 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
           { 
             element: goldZoneRef.current, 
             discount: 40, 
-            name: 'Gold Zone',
+            name: 'Golden Zone',
             color: 'gold'
           }
         ];

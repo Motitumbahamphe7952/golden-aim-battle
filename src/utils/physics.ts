@@ -1,4 +1,3 @@
-
 export interface Position {
   x: number;
   y: number;
@@ -80,54 +79,20 @@ export class BallPhysics {
     const tableWidth = this.tableRect.width;
     const tableHeight = this.tableRect.height;
     
-    // Set random positions for all balls ensuring they don't overlap
+    // Set the balls in a parallel arrangement
     const padding = 50; // Space from edges
-    const minDistance = 70; // Minimum distance between balls
+    const ballSize = this.balls[0].width;
     
-    const ballPositions: Position[] = [];
+    // Randomly choose a starting position for the parallel arrangement
+    const startX = padding + Math.random() * (tableWidth - padding * 2 - ballSize * 3 - this.horizontalOffset * 2);
+    const startY = padding + Math.random() * (tableHeight - padding * 2 - ballSize);
     
+    // Position balls in a parallel line with horizontal spacing
     this.balls.forEach((ball, index) => {
-      let validPosition = false;
-      let attempts = 0;
-      let newPos: Position;
-      
-      // Try to find a non-overlapping position
-      while (!validPosition && attempts < 50) {
-        newPos = {
-          x: padding + Math.random() * (tableWidth - padding * 2 - ball.width),
-          y: padding + Math.random() * (tableHeight - padding * 2 - ball.height)
-        };
-        
-        // Check if this position overlaps with any existing balls
-        let overlaps = false;
-        for (let i = 0; i < ballPositions.length; i++) {
-          const dx = newPos.x - ballPositions[i].x;
-          const dy = newPos.y - ballPositions[i].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < minDistance) {
-            overlaps = true;
-            break;
-          }
-        }
-        
-        if (!overlaps) {
-          validPosition = true;
-          ballPositions.push(newPos);
-          ball.position = newPos;
-        }
-        
-        attempts++;
-      }
-      
-      // If we couldn't find a non-overlapping position, just place it somewhere
-      if (!validPosition) {
-        ball.position = {
-          x: padding + (tableWidth - padding * 2 - ball.width) * (index + 1) / (this.balls.length + 1),
-          y: padding + (tableHeight - padding * 2 - ball.height) * (index + 1) / (this.balls.length + 1)
-        };
-        ballPositions.push(ball.position);
-      }
+      ball.position = {
+        x: startX + index * (ballSize + this.horizontalOffset),
+        y: startY
+      };
       
       // Reset velocity
       ball.velocity = { x: 0, y: 0 };
@@ -137,7 +102,7 @@ export class BallPhysics {
       this.updateBallPosition(ball);
     });
     
-    // Randomize zone positions
+    // Randomize zones position
     this.randomizeZones();
   }
   
@@ -147,39 +112,22 @@ export class BallPhysics {
     const tableWidth = this.tableRect.width;
     const tableHeight = this.tableRect.height;
     
-    // Try to position zones in the center area
-    const centerX = tableWidth / 2;
-    const centerY = tableHeight / 2;
+    // Choose a random position for the zones stack
+    const largestZoneSize = parseFloat(this.zones[0].element.style.width);
+    const padding = 50; // Space from edges
     
-    this.zones.forEach((zone, index) => {
+    const stackX = padding + Math.random() * (tableWidth - padding * 2 - largestZoneSize);
+    const stackY = padding + Math.random() * (tableHeight - padding * 2 - largestZoneSize);
+    
+    // Position zones in a stack (largest at bottom, smallest at top)
+    this.zones.forEach((zone) => {
       const zoneSize = parseFloat(zone.element.style.width);
-      const halfSize = zoneSize / 2;
       
-      // The largest zone (index 0 - blue) should be in the center
-      // Medium zone (index 1 - red) in a random position around center
-      // Smallest zone (index 2 - gold) in a random position around center
-      let x, y;
+      // Center smaller zones on top of larger ones
+      const offsetToCenter = (largestZoneSize - zoneSize) / 2;
       
-      if (index === 0) {
-        // Center the largest zone
-        x = centerX - halfSize;
-        y = centerY - halfSize;
-      } else {
-        // Place other zones at random offsets from center
-        const maxOffset = Math.min(tableWidth, tableHeight) * 0.2;
-        const angle = Math.random() * Math.PI * 2;
-        const distance = Math.random() * maxOffset;
-        
-        x = centerX + Math.cos(angle) * distance - halfSize;
-        y = centerY + Math.sin(angle) * distance - halfSize;
-        
-        // Ensure zones stay within bounds
-        x = Math.max(0, Math.min(x, tableWidth - zoneSize));
-        y = Math.max(0, Math.min(y, tableHeight - zoneSize));
-      }
-      
-      zone.element.style.left = `${x}px`;
-      zone.element.style.top = `${y}px`;
+      zone.element.style.left = `${stackX + offsetToCenter}px`;
+      zone.element.style.top = `${stackY + offsetToCenter}px`;
     });
   }
 
