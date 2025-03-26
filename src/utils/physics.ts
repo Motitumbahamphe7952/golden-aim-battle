@@ -82,8 +82,8 @@ export class BallPhysics {
     
     this.balls.forEach((ball, index) => {
       ball.position = { 
-        x: tableWidth * 0.2 - ball.width / 2, 
-        y: (tableHeight / 2 - ball.height / 2) + (index - 1) * this.horizontalOffset
+        x: (tableWidth / (this.balls.length + 5)) * (index + 1) - ball.width / 2, 
+        y: tableHeight / 2 - ball.height / 2
       };
       
       // Reset velocity
