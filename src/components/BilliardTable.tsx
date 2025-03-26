@@ -17,6 +17,8 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
 }) => {
   const tableRef = useRef<HTMLDivElement>(null);
   const ballRef = useRef<HTMLDivElement>(null);
+  const ball2Ref = useRef<HTMLDivElement>(null);
+  const ball3Ref = useRef<HTMLDivElement>(null);
   const aimLineRef = useRef<HTMLDivElement>(null);
   const goldZoneRef = useRef<HTMLDivElement>(null);
   const redZoneRef = useRef<HTMLDivElement>(null);
@@ -27,9 +29,11 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
   
   // Initialize physics and aiming systems
   useEffect(() => {
-    if (tableRef.current && ballRef.current && aimLineRef.current) {
+    if (tableRef.current && ballRef.current && ball2Ref.current && ball3Ref.current && aimLineRef.current) {
+      const ballElements = [ballRef.current, ball2Ref.current, ball3Ref.current];
+      
       const newPhysics = new BallPhysics({
-        ball: ballRef.current,
+        balls: ballElements,
         table: tableRef.current,
         onBallStop
       });
@@ -95,22 +99,22 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
 
   return (
     <div className="billiard-table">
-      <div className="billiard-inner" ref={tableRef}  style={{ 
+      <div className="billiard-inner" ref={tableRef} style={{ 
             backgroundImage: `url("/cropedimage.jpg")`, 
             backgroundSize: 'contain',
             backgroundPosition: 'center',
             position: 'relative',}}>
-      <div className="billiard-border"></div>
-      <div ref={blueZoneRef} className="target-zone" style={{ width: '180px', height: '180px', backgroundColor: '#457B9D' }}></div>
-      <div ref={redZoneRef} className="target-zone" style={{ width: '120px', height: '120px', backgroundColor: '#E63946' }}></div>
-      <div ref={goldZoneRef} className="target-zone" style={{ width: '70px', height: '70px', backgroundColor: '#FFD700' }}></div>
-      <div ref={ballRef} className="ball"  style={{ backgroundColor: 'red' }}></div>
-      <div ref={aimLineRef} className="aim-line"></div>
+        <div className="billiard-border"></div>
+        <div ref={blueZoneRef} className="target-zone" style={{ width: '180px', height: '180px', backgroundColor: '#457B9D' }}></div>
+        <div ref={redZoneRef} className="target-zone" style={{ width: '120px', height: '120px', backgroundColor: '#E63946' }}></div>
+        <div ref={goldZoneRef} className="target-zone" style={{ width: '70px', height: '70px', backgroundColor: '#FFD700' }}></div>
+        <div ref={ballRef} className="ball" style={{ backgroundColor: 'red' }}></div>
+        <div ref={ball2Ref} className="ball" style={{ backgroundColor: 'blue' }}></div>
+        <div ref={ball3Ref} className="ball" style={{ backgroundColor: 'green' }}></div>
+        <div ref={aimLineRef} className="aim-line"></div>
       </div>
     </div>
   );
 };
 
 export default BilliardTable;
-
-

@@ -22,14 +22,6 @@ const GameContainer: React.FC = () => {
     setShootTrigger(false);
   };
   
-  // const handleBallStop = (result: { discount: number; name: string; color: string }) => {
-  //   const discountText = `${result.discount}`;
-  //   setResult(result);
-  //   setShowResult(true);
-  //   setIsPlaying(false);
-  // };
-
-
   const getZone = (result: { discount: number; name: string; color: string }) => {
     if (result.discount === 20) {
       return { discount: 20, name: 'Blue Zone', color: 'blue' };
@@ -41,9 +33,9 @@ const GameContainer: React.FC = () => {
       return { discount: 0, name: 'No Zone', color: 'gray' };
     }
   };
+  
   const handleBallStop = (result: { discount: number ; name: string; color: string }) => {
     const zone = getZone(result); // Get the zone that the ball landed on
-    const discountText = `${zone.discount}`;
     setResult({ discount: zone.discount, name: zone.name, color: zone.color });
     setShowResult(true);
     setIsPlaying(false);
@@ -60,13 +52,16 @@ const GameContainer: React.FC = () => {
         power={power}
         shootTrigger={shootTrigger}
         onShootComplete={handleShootComplete}
-        
       />
       
       <Controls 
         onShoot={handleShoot}
         disabled={isPlaying}
       />
+      
+      <div className="text-center mt-4 text-sm text-gray-300">
+        <p>Three balls will move together - the green ball determines your final reward!</p>
+      </div>
       
       <Dialog open={showResult} onOpenChange={closeModal}>
         <DialogContent className="sm:max-w-md animate-scale-in">
@@ -75,7 +70,7 @@ const GameContainer: React.FC = () => {
               {result?.discount > 0 ? `${result.discount}% Discount!` : 'No Discount'}
             </DialogTitle>
             <DialogDescription className="text-center">
-              You landed in the {result?.name}!
+              Your green ball landed in the {result?.name}!
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-center mt-4">
