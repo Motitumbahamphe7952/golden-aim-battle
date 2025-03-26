@@ -92,12 +92,12 @@ export class BallPhysics {
     
     // Calculate initial velocity based on power
     const baseSpeed = this.tableRect.width * 0.05;
-    const speedMultiplier = power / 5; // Normalize power
+    const speedMultiplier = power / 8; // Normalize power
     
     // Set initial velocity
     this.velocity = {
-      x: baseSpeed * speedMultiplier * Math.cos(angleRad),
-      y: baseSpeed * speedMultiplier * Math.sin(angleRad)
+      x: -baseSpeed * speedMultiplier * Math.cos(angleRad),
+      y: -baseSpeed * speedMultiplier * Math.sin(angleRad)
     };
 
     // Start animation

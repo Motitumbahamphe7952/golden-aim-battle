@@ -22,8 +22,29 @@ const GameContainer: React.FC = () => {
     setShootTrigger(false);
   };
   
-  const handleBallStop = (result: { discount: number; name: string; color: string }) => {
-    setResult(result);
+  // const handleBallStop = (result: { discount: number; name: string; color: string }) => {
+  //   const discountText = `${result.discount}`;
+  //   setResult(result);
+  //   setShowResult(true);
+  //   setIsPlaying(false);
+  // };
+
+
+  const getZone = (result: { discount: number; name: string; color: string }) => {
+    if (result.discount === 20) {
+      return { discount: 20, name: 'Blue Zone', color: 'blue' };
+    } else if (result.discount === 30) {
+      return { discount: 30, name: 'Red Zone', color: 'red' };
+    } else if (result.discount === 40) {
+      return { discount: 40, name: 'Golden Zone', color: 'golden' };
+    } else {
+      return { discount: 0, name: 'No Zone', color: 'gray' };
+    }
+  };
+  const handleBallStop = (result: { discount: number ; name: string; color: string }) => {
+    const zone = getZone(result); // Get the zone that the ball landed on
+    const discountText = `${zone.discount}`;
+    setResult({ discount: zone.discount, name: zone.name, color: zone.color });
     setShowResult(true);
     setIsPlaying(false);
   };
@@ -33,12 +54,13 @@ const GameContainer: React.FC = () => {
   };
   
   return (
-    <div className="max-w-4xl w-full mx-auto px-4 sm:px-6 animate-fade-in">
+    <div className="max-w-4xl w-full mx-auto px-4 sm:px-2 animate-fade-in">
       <BilliardTable 
         onBallStop={handleBallStop}
         power={power}
         shootTrigger={shootTrigger}
         onShootComplete={handleShootComplete}
+        
       />
       
       <Controls 

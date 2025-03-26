@@ -80,23 +80,23 @@
 
 @layer components {
   .billiard-table {
-    @apply relative w-full aspect-video rounded-xl overflow-hidden cursor-crosshair;
+    @apply relative w-full aspect-video rounded-3xl overflow-hidden cursor-crosshair;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    /* transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); */
   }
 
   .billiard-inner {
     @apply absolute top-0 left-0 w-full h-full bg-game-table;
-    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    /* transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); */
   }
 
   .billiard-border {
-    @apply absolute top-0 left-0 w-full h-full border-[15px] border-game-border rounded-xl;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    @apply absolute top-0 left-0 w-full h-full border-[13px] border-game-border rounded-3xl;
+    /* transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); */
   }
 
   .ball {
-    @apply absolute bg-game-white rounded-full shadow-md;
+    @apply absolute bg-game-red rounded-full shadow-md ;
     width: 20px;
     height: 20px;
     transition: box-shadow 0.3s ease;
@@ -104,7 +104,8 @@
 
   .aim-line {
     @apply absolute bg-white bg-opacity-50 pointer-events-none;
-    height: 2px;
+    height: 3px;
+    width: 5px;
     transform-origin: left center;
     transition: opacity 0.2s ease;
   }
@@ -112,7 +113,7 @@
   .target-zone {
     @apply absolute rounded-full opacity-60;
     top: 50%;
-    left: 50%;
+    left: 70%;
     transform: translate(-50%, -50%);
     transition: opacity 0.3s ease;
   }

@@ -95,16 +95,22 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
 
   return (
     <div className="billiard-table">
-      <div className="billiard-inner" ref={tableRef}>
-        <div className="billiard-border"></div>
-        <div ref={blueZoneRef} className="target-zone" style={{ width: '180px', height: '180px', backgroundColor: '#457B9D' }}></div>
-        <div ref={redZoneRef} className="target-zone" style={{ width: '120px', height: '120px', backgroundColor: '#E63946' }}></div>
-        <div ref={goldZoneRef} className="target-zone" style={{ width: '70px', height: '70px', backgroundColor: '#FFD700' }}></div>
-        <div ref={ballRef} className="ball animate-pulse-subtle"></div>
-        <div ref={aimLineRef} className="aim-line"></div>
+      <div className="billiard-inner" ref={tableRef}  style={{ 
+            backgroundImage: `url("/cropedimage.jpg")`, 
+            backgroundSize: 'contain',
+            backgroundPosition: 'center',
+            position: 'relative',}}>
+      <div className="billiard-border"></div>
+      <div ref={blueZoneRef} className="target-zone" style={{ width: '180px', height: '180px', backgroundColor: '#457B9D' }}></div>
+      <div ref={redZoneRef} className="target-zone" style={{ width: '120px', height: '120px', backgroundColor: '#E63946' }}></div>
+      <div ref={goldZoneRef} className="target-zone" style={{ width: '70px', height: '70px', backgroundColor: '#FFD700' }}></div>
+      <div ref={ballRef} className="ball"  style={{ backgroundColor: 'red' }}></div>
+      <div ref={aimLineRef} className="aim-line"></div>
       </div>
     </div>
   );
 };
 
 export default BilliardTable;
+
+
