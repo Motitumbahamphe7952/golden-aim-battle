@@ -60,7 +60,7 @@ const GameContainer: React.FC = () => {
       />
       
       <div className="text-center mt-4 text-sm text-gray-300">
-        <p>Three balls will move together - the green ball determines your final reward!</p>
+        <p>Shoot the red ball. Balls will only move when hit - the green ball determines your final reward!</p>
       </div>
       
       <Dialog open={showResult} onOpenChange={closeModal}>

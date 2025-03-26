@@ -108,21 +108,19 @@ export class BallPhysics {
     const baseSpeed = this.tableRect.width * 0.05;
     const speedMultiplier = power / 8; // Normalize power
     
-    // Set initial velocity for all balls with slight variations
-    this.balls.forEach((ball, index) => {
-      // Add some variation to each ball's angle and power
-      const angleVariation = (Math.random() * 6) - 3; // ±3 degrees variation
-      const powerVariation = (Math.random() * 0.4) - 0.2; // ±0.2 power variation
-      
-      const ballAngle = angleRad + (angleVariation * Math.PI / 180);
-      const ballPower = speedMultiplier + powerVariation;
-      
-      ball.velocity = {
-        x: -baseSpeed * ballPower * Math.cos(ballAngle),
-        y: -baseSpeed * ballPower * Math.sin(ballAngle)
-      };
-      ball.stopped = false;
-    });
+    // Only set velocity for the first ball (red ball)
+    const cueBall = this.balls[0];
+    cueBall.velocity = {
+      x: -baseSpeed * speedMultiplier * Math.cos(angleRad),
+      y: -baseSpeed * speedMultiplier * Math.sin(angleRad)
+    };
+    cueBall.stopped = false;
+    
+    // Make sure other balls are initially stopped
+    for (let i = 1; i < this.balls.length; i++) {
+      this.balls[i].velocity = { x: 0, y: 0 };
+      this.balls[i].stopped = true;
+    }
 
     // Start animation
     this.animate();
@@ -188,6 +186,12 @@ export class BallPhysics {
           // Update ball velocities
           ball.velocity.x = (vx2 * cos - vy1 * sin) * 0.9; // Reduce energy a bit
           ball.velocity.y = (vy1 * cos + vx2 * sin) * 0.9;
+          
+          // Only update the other ball's velocity if it was stationary
+          if (otherBall.stopped) {
+            otherBall.stopped = false;
+          }
+          
           otherBall.velocity.x = (temp * cos - vy2 * sin) * 0.9;
           otherBall.velocity.y = (vy2 * cos + temp * sin) * 0.9;
 
