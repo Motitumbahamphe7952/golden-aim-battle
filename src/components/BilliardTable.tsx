@@ -48,10 +48,10 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
       if (goldZoneRef.current && redZoneRef.current && blueZoneRef.current) {
         const zones: Zone[] = [
           { 
-            element: goldZoneRef.current, 
-            discount: 40, 
-            name: 'Gold Zone',
-            color: 'gold'
+            element: blueZoneRef.current, 
+            discount: 20, 
+            name: 'Blue Zone',
+            color: 'blue'
           },
           { 
             element: redZoneRef.current, 
@@ -60,10 +60,10 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
             color: 'red'
           },
           { 
-            element: blueZoneRef.current, 
-            discount: 20, 
-            name: 'Blue Zone',
-            color: 'blue'
+            element: goldZoneRef.current, 
+            discount: 40, 
+            name: 'Gold Zone',
+            color: 'gold'
           }
         ];
         
@@ -105,13 +105,13 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
             backgroundPosition: 'center',
             position: 'relative',}}>
         <div className="billiard-border"></div>
-        <div ref={blueZoneRef} className="target-zone" style={{ width: '180px', height: '180px', backgroundColor: '#457B9D' }}></div>
-        <div ref={redZoneRef} className="target-zone" style={{ width: '120px', height: '120px', backgroundColor: '#E63946' }}></div>
-        <div ref={goldZoneRef} className="target-zone" style={{ width: '70px', height: '70px', backgroundColor: '#FFD700' }}></div>
-        <div ref={ballRef} className="ball" style={{ backgroundColor: 'red' }}></div>
-        <div ref={ball2Ref} className="ball" style={{ backgroundColor: 'blue' }}></div>
-        <div ref={ball3Ref} className="ball" style={{ backgroundColor: 'green' }}></div>
-        <div ref={aimLineRef} className="aim-line"></div>
+        <div ref={blueZoneRef} className="target-zone absolute rounded-full" style={{ width: '180px', height: '180px', backgroundColor: 'rgba(69, 123, 157, 0.7)' }}></div>
+        <div ref={redZoneRef} className="target-zone absolute rounded-full" style={{ width: '120px', height: '120px', backgroundColor: 'rgba(230, 57, 70, 0.7)' }}></div>
+        <div ref={goldZoneRef} className="target-zone absolute rounded-full" style={{ width: '70px', height: '70px', backgroundColor: 'rgba(255, 215, 0, 0.7)' }}></div>
+        <div ref={ballRef} className="ball absolute" style={{ backgroundColor: 'red', width: '30px', height: '30px', borderRadius: '50%' }}></div>
+        <div ref={ball2Ref} className="ball absolute" style={{ backgroundColor: 'blue', width: '30px', height: '30px', borderRadius: '50%' }}></div>
+        <div ref={ball3Ref} className="ball absolute" style={{ backgroundColor: 'green', width: '30px', height: '30px', borderRadius: '50%' }}></div>
+        <div ref={aimLineRef} className="aim-line absolute" style={{ height: '2px', backgroundColor: 'rgba(255, 255, 255, 0.7)', transformOrigin: 'left center' }}></div>
       </div>
     </div>
   );

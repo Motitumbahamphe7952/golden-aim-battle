@@ -76,15 +76,58 @@ export class BallPhysics {
     
     this.updateTableRect();
     
-    // Position balls at the left side of the table in a row
+    // Get table dimensions
     const tableWidth = this.tableRect.width;
     const tableHeight = this.tableRect.height;
     
+    // Set random positions for all balls ensuring they don't overlap
+    const padding = 50; // Space from edges
+    const minDistance = 70; // Minimum distance between balls
+    
+    const ballPositions: Position[] = [];
+    
     this.balls.forEach((ball, index) => {
-      ball.position = { 
-        x: (tableWidth / (this.balls.length + 5)) * (index + 1) - ball.width / 2, 
-        y: tableHeight / 2 - ball.height / 2
-      };
+      let validPosition = false;
+      let attempts = 0;
+      let newPos: Position;
+      
+      // Try to find a non-overlapping position
+      while (!validPosition && attempts < 50) {
+        newPos = {
+          x: padding + Math.random() * (tableWidth - padding * 2 - ball.width),
+          y: padding + Math.random() * (tableHeight - padding * 2 - ball.height)
+        };
+        
+        // Check if this position overlaps with any existing balls
+        let overlaps = false;
+        for (let i = 0; i < ballPositions.length; i++) {
+          const dx = newPos.x - ballPositions[i].x;
+          const dy = newPos.y - ballPositions[i].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < minDistance) {
+            overlaps = true;
+            break;
+          }
+        }
+        
+        if (!overlaps) {
+          validPosition = true;
+          ballPositions.push(newPos);
+          ball.position = newPos;
+        }
+        
+        attempts++;
+      }
+      
+      // If we couldn't find a non-overlapping position, just place it somewhere
+      if (!validPosition) {
+        ball.position = {
+          x: padding + (tableWidth - padding * 2 - ball.width) * (index + 1) / (this.balls.length + 1),
+          y: padding + (tableHeight - padding * 2 - ball.height) * (index + 1) / (this.balls.length + 1)
+        };
+        ballPositions.push(ball.position);
+      }
       
       // Reset velocity
       ball.velocity = { x: 0, y: 0 };
@@ -92,6 +135,51 @@ export class BallPhysics {
       
       // Update ball position
       this.updateBallPosition(ball);
+    });
+    
+    // Randomize zone positions
+    this.randomizeZones();
+  }
+  
+  private randomizeZones(): void {
+    if (!this.zones.length) return;
+    
+    const tableWidth = this.tableRect.width;
+    const tableHeight = this.tableRect.height;
+    
+    // Try to position zones in the center area
+    const centerX = tableWidth / 2;
+    const centerY = tableHeight / 2;
+    
+    this.zones.forEach((zone, index) => {
+      const zoneSize = parseFloat(zone.element.style.width);
+      const halfSize = zoneSize / 2;
+      
+      // The largest zone (index 0 - blue) should be in the center
+      // Medium zone (index 1 - red) in a random position around center
+      // Smallest zone (index 2 - gold) in a random position around center
+      let x, y;
+      
+      if (index === 0) {
+        // Center the largest zone
+        x = centerX - halfSize;
+        y = centerY - halfSize;
+      } else {
+        // Place other zones at random offsets from center
+        const maxOffset = Math.min(tableWidth, tableHeight) * 0.2;
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * maxOffset;
+        
+        x = centerX + Math.cos(angle) * distance - halfSize;
+        y = centerY + Math.sin(angle) * distance - halfSize;
+        
+        // Ensure zones stay within bounds
+        x = Math.max(0, Math.min(x, tableWidth - zoneSize));
+        y = Math.max(0, Math.min(y, tableHeight - zoneSize));
+      }
+      
+      zone.element.style.left = `${x}px`;
+      zone.element.style.top = `${y}px`;
     });
   }
 

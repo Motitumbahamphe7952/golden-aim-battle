@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import BilliardTable from './BilliardTable';
 import Controls from './Controls';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -11,6 +11,7 @@ const GameContainer: React.FC = () => {
   const [result, setResult] = useState<{ discount: number; name: string; color: string } | null>(null);
   const [showResult, setShowResult] = useState<boolean>(false);
   const [power, setPower] = useState<number>(5);
+  const [gameKey, setGameKey] = useState<number>(0); // Key to force component re-render for reset
   
   const handleShoot = (selectedPower: number) => {
     setPower(selectedPower);
@@ -41,13 +42,15 @@ const GameContainer: React.FC = () => {
     setIsPlaying(false);
   };
   
-  const closeModal = () => {
+  const resetGame = () => {
     setShowResult(false);
+    setGameKey(prevKey => prevKey + 1); // Force component re-render to reset positions
   };
   
   return (
     <div className="max-w-4xl w-full mx-auto px-4 sm:px-2 animate-fade-in">
       <BilliardTable 
+        key={gameKey} // Force re-render when key changes
         onBallStop={handleBallStop}
         power={power}
         shootTrigger={shootTrigger}
@@ -63,7 +66,7 @@ const GameContainer: React.FC = () => {
         <p>Shoot the red ball. Balls will only move when hit - the green ball determines your final reward!</p>
       </div>
       
-      <Dialog open={showResult} onOpenChange={closeModal}>
+      <Dialog open={showResult} onOpenChange={setShowResult}>
         <DialogContent className="sm:max-w-md animate-scale-in">
           <DialogHeader>
             <DialogTitle className="text-2xl text-center">
@@ -74,7 +77,7 @@ const GameContainer: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-center mt-4">
-            <Button onClick={closeModal} className="px-8">Play Again</Button>
+            <Button onClick={resetGame} className="px-8">Play Again</Button>
           </div>
         </DialogContent>
       </Dialog>
