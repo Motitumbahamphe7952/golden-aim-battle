@@ -39,7 +39,7 @@ export class BallPhysics {
   private zones: Zone[];
   private onBallStop: (result: { discount: number; name: string; color: string }) => void;
   private animationFrameId: number | null = null;
-  private horizontalOffset: number = 30; // Spacing between balls
+  private horizontalOffset: number = 60; // Spacing between balls
 
   constructor(props: BallPhysicsProps) {
     this.table = props.table;
@@ -68,7 +68,37 @@ export class BallPhysics {
   }
 
   public reset(): void {
-    // Cancel any ongoing animation
+    // if (this.animationFrameId !== null) {
+    //   cancelAnimationFrame(this.animationFrameId);
+    //   this.animationFrameId = null;
+    // }
+    
+    // this.updateTableRect();
+    
+    // const tableWidth = this.tableRect.width;
+    // const tableHeight = this.tableRect.height;
+    
+    // // Position the cue ball separately from others
+    // this.balls.forEach((ball, index) => {
+    //   if (index === 0) {
+    //     // Position cue ball at the front
+    //     ball.position = {
+    //       x: tableWidth * 0.2,
+    //       y: tableHeight / 2 - ball.height / 2
+    //     };
+    //   } else {
+    //     // Position other balls in a line behind
+    //     ball.position = {
+    //       x: tableWidth * 0.2 + index * this.horizontalOffset,
+    //       y: tableHeight / 2 - ball.height / 2
+    //     };
+    //   }
+      
+    //   ball.velocity = { x: 0, y: 0 };
+    //   ball.stopped = true;
+    //   this.updateBallPosition(ball);
+    // });
+
     if (this.animationFrameId !== null) {
       cancelAnimationFrame(this.animationFrameId);
       this.animationFrameId = null;
@@ -76,67 +106,65 @@ export class BallPhysics {
     
     this.updateTableRect();
     
-    // Position balls at the left side of the table in a row
     const tableWidth = this.tableRect.width;
     const tableHeight = this.tableRect.height;
-    
+    const ballHeight = this.balls[0].height;
+    const minY = 0;
+    const maxY = tableHeight - ballHeight;
+    const randomY = Math.random() * (maxY - minY) + minY;
+  
     this.balls.forEach((ball, index) => {
-      ball.position = { 
-        x: (tableWidth / (this.balls.length + 5)) * (index + 1) - ball.width / 2, 
-        y: tableHeight / 2 - ball.height / 2
-      };
+      if (index === 0) {
+        ball.position = {
+          x: tableWidth * 0.2,
+          y: randomY
+        };
+      } else {
+        ball.position = {
+          x: tableWidth * 0.2 + index * this.horizontalOffset,
+          y: randomY
+        };
+      }
       
-      // Reset velocity
       ball.velocity = { x: 0, y: 0 };
       ball.stopped = true;
-      
-      // Update ball position
       this.updateBallPosition(ball);
     });
   }
 
   public shoot(angle: number, power: number): void {
-    // Cancel any ongoing animation
     if (this.animationFrameId !== null) {
       cancelAnimationFrame(this.animationFrameId);
     }
     
-    // Convert angle to radians
     const angleRad = angle * Math.PI / 180;
-    
-    // Calculate initial velocity based on power
     const baseSpeed = this.tableRect.width * 0.05;
-    const speedMultiplier = power / 8; // Normalize power
-    
-    // Set initial velocity for all balls
-    this.balls.forEach(ball => {
-      ball.velocity = {
-        x: -baseSpeed * speedMultiplier * Math.cos(angleRad),
-        y: -baseSpeed * speedMultiplier * Math.sin(angleRad)
-      };
-      ball.stopped = false;
-    });
+    const speedMultiplier = power / 8;
 
-    // Start animation
+    // Apply force only to the cue ball (first ball)
+    const cueBall = this.balls[0];
+    cueBall.velocity = {
+      x: -baseSpeed * speedMultiplier * Math.cos(angleRad),
+      y: -baseSpeed * speedMultiplier * Math.sin(angleRad)
+    };
+    cueBall.stopped = false;
+
     this.animate();
   }
 
   private animate(): void {
     let allStopped = true;
-    
-    // Update each ball
+
+    // Update velocities and positions
     this.balls.forEach(ball => {
       if (ball.stopped) return;
-      
-      // Apply friction
+
       ball.velocity.x *= this.friction;
       ball.velocity.y *= this.friction;
-
-      // Update position
       ball.position.x += ball.velocity.x;
       ball.position.y += ball.velocity.y;
 
-      // Wall collisions with energy loss
+      // Wall collisions
       const energyLoss = 0.8;
       if (ball.position.x <= 0) {
         ball.position.x = 0;
@@ -154,10 +182,7 @@ export class BallPhysics {
         ball.velocity.y = -Math.abs(ball.velocity.y) * energyLoss;
       }
 
-      // Update ball position
-      this.updateBallPosition(ball);
-
-      // Check if ball has nearly stopped
+      // Check stopping condition
       if (Math.abs(ball.velocity.x) < 0.1 && Math.abs(ball.velocity.y) < 0.1) {
         ball.stopped = true;
       } else {
@@ -165,15 +190,69 @@ export class BallPhysics {
       }
     });
 
-    // If all balls have stopped
+    // Resolve ball collisions
+    this.resolveCollisions();
+
+    // Update positions and check final stopped state
+    this.balls.forEach(ball => {
+      this.updateBallPosition(ball);
+      if (!ball.stopped) allStopped = false;
+    });
+
     if (allStopped) {
-      // Get results from the last ball (index 2)
       this.checkZone(this.balls[2]);
       return;
     }
 
-    // Continue animation
     this.animationFrameId = requestAnimationFrame(() => this.animate());
+  }
+
+  private resolveCollisions(): void {
+    for (let i = 0; i < this.balls.length; i++) {
+      for (let j = i + 1; j < this.balls.length; j++) {
+        const ball1 = this.balls[i];
+        const ball2 = this.balls[j];
+        const dx = (ball2.position.x + ball2.width/2) - (ball1.position.x + ball1.width/2);
+        const dy = (ball2.position.y + ball2.height/2) - (ball1.position.y + ball1.height/2);
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const minDistance = (ball1.width + ball2.width) / 2;
+
+        if (distance < minDistance) {
+          // Collision detected
+          const nx = dx / distance;
+          const ny = dy / distance;
+          const tx = -ny;
+          const ty = nx;
+
+          // Project velocities onto normal and tangent
+          const v1n = nx * ball1.velocity.x + ny * ball1.velocity.y;
+          const v1t = tx * ball1.velocity.x + ty * ball1.velocity.y;
+          const v2n = nx * ball2.velocity.x + ny * ball2.velocity.y;
+          const v2t = tx * ball2.velocity.x + ty * ball2.velocity.y;
+
+          // Swap normal velocities with coefficient of restitution
+          const cor = 0.95;
+          const newV1n = v2n * cor;
+          const newV2n = v1n * cor;
+
+          // Convert back to vectors
+          ball1.velocity.x = newV1n * nx + v1t * tx;
+          ball1.velocity.y = newV1n * ny + v1t * ty;
+          ball2.velocity.x = newV2n * nx + v2t * tx;
+          ball2.velocity.y = newV2n * ny + v2t * ty;
+
+          // Position correction
+          const overlap = (minDistance - distance) / 2;
+          ball1.position.x -= nx * overlap;
+          ball1.position.y -= ny * overlap;
+          ball2.position.x += nx * overlap;
+          ball2.position.y += ny * overlap;
+
+          ball1.stopped = false;
+          ball2.stopped = false;
+        }
+      }
+    }
   }
 
   private updateBallPosition(ball: BallState): void {
