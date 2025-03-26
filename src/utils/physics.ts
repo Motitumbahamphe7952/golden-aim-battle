@@ -108,11 +108,18 @@ export class BallPhysics {
     const baseSpeed = this.tableRect.width * 0.05;
     const speedMultiplier = power / 8; // Normalize power
     
-    // Set initial velocity for all balls
-    this.balls.forEach(ball => {
+    // Set initial velocity for all balls with slight variations
+    this.balls.forEach((ball, index) => {
+      // Add some variation to each ball's angle and power
+      const angleVariation = (Math.random() * 6) - 3; // ±3 degrees variation
+      const powerVariation = (Math.random() * 0.4) - 0.2; // ±0.2 power variation
+      
+      const ballAngle = angleRad + (angleVariation * Math.PI / 180);
+      const ballPower = speedMultiplier + powerVariation;
+      
       ball.velocity = {
-        x: -baseSpeed * speedMultiplier * Math.cos(angleRad),
-        y: -baseSpeed * speedMultiplier * Math.sin(angleRad)
+        x: -baseSpeed * ballPower * Math.cos(ballAngle),
+        y: -baseSpeed * ballPower * Math.sin(ballAngle)
       };
       ball.stopped = false;
     });
@@ -124,7 +131,7 @@ export class BallPhysics {
   private animate(): void {
     let allStopped = true;
     
-    // Update each ball
+    // Update each ball independently
     this.balls.forEach(ball => {
       if (ball.stopped) return;
       
@@ -154,12 +161,53 @@ export class BallPhysics {
         ball.velocity.y = -Math.abs(ball.velocity.y) * energyLoss;
       }
 
+      // Simple collision detection with other balls
+      this.balls.forEach(otherBall => {
+        if (ball === otherBall) return;
+
+        const dx = ball.position.x - otherBall.position.x;
+        const dy = ball.position.y - otherBall.position.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const minDistance = (ball.width + otherBall.width) / 2;
+
+        if (distance < minDistance) {
+          // Calculate collision response
+          const angle = Math.atan2(dy, dx);
+          const sin = Math.sin(angle);
+          const cos = Math.cos(angle);
+
+          // Rotate ball velocities
+          const vx1 = ball.velocity.x * cos + ball.velocity.y * sin;
+          const vy1 = ball.velocity.y * cos - ball.velocity.x * sin;
+          const vx2 = otherBall.velocity.x * cos + otherBall.velocity.y * sin;
+          const vy2 = otherBall.velocity.y * cos - otherBall.velocity.x * sin;
+
+          // Swap the x velocities
+          const temp = vx1;
+          
+          // Update ball velocities
+          ball.velocity.x = (vx2 * cos - vy1 * sin) * 0.9; // Reduce energy a bit
+          ball.velocity.y = (vy1 * cos + vx2 * sin) * 0.9;
+          otherBall.velocity.x = (temp * cos - vy2 * sin) * 0.9;
+          otherBall.velocity.y = (vy2 * cos + temp * sin) * 0.9;
+
+          // Move balls apart to prevent sticking
+          const overlap = minDistance - distance;
+          ball.position.x += overlap * cos * 0.5;
+          ball.position.y += overlap * sin * 0.5;
+          otherBall.position.x -= overlap * cos * 0.5;
+          otherBall.position.y -= overlap * sin * 0.5;
+        }
+      });
+
       // Update ball position
       this.updateBallPosition(ball);
 
       // Check if ball has nearly stopped
       if (Math.abs(ball.velocity.x) < 0.1 && Math.abs(ball.velocity.y) < 0.1) {
         ball.stopped = true;
+        ball.velocity.x = 0;
+        ball.velocity.y = 0;
       } else {
         allStopped = false;
       }
