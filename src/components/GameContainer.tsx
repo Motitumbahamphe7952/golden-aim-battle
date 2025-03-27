@@ -2,6 +2,7 @@
 import React, { useState, useRef } from 'react';
 import BilliardTable from './BilliardTable';
 import Controls from './Controls';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 
@@ -12,6 +13,7 @@ const GameContainer: React.FC = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [power, setPower] = useState<number>(5);
   const [gameKey, setGameKey] = useState<number>(0); // Key to force component re-render for reset
+  const isMobile = useIsMobile();
   
   const handleShoot = (selectedPower: number) => {
     setPower(selectedPower);
@@ -48,29 +50,34 @@ const GameContainer: React.FC = () => {
   };
   
   return (
-    <div className="max-w-4xl w-full mx-auto px-4 sm:px-2 animate-fade-in">
-      <style>
-        {`
-          .aim-line.locked {
-            background-color: rgba(255, 0, 0, 0.8);
-            height: 3px;
-            box-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
-          }
-        `}
-      </style>
+    <div className="w-full mx-auto px-2 animate-fade-in max-w-full sm:max-w-4xl">
+      <style jsx>{`
+        .aim-line.locked {
+          background-color: rgba(255, 0, 0, 0.8);
+          height: 3px;
+          box-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
+        }
+      `}</style>
       
-      <BilliardTable 
-        key={gameKey} // Force re-render when key changes
-        onBallStop={handleBallStop}
-        power={power}
-        shootTrigger={shootTrigger}
-        onShootComplete={handleShootComplete}
-      />
-      
-      <Controls 
-        onShoot={handleShoot}
-        disabled={isPlaying}
-      />
+      <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-4`}>
+        <div className={`${isMobile ? 'w-full h-[60vh]' : 'w-3/4'}`}>
+          <BilliardTable 
+            key={gameKey} // Force re-render when key changes
+            onBallStop={handleBallStop}
+            power={power}
+            shootTrigger={shootTrigger}
+            onShootComplete={handleShootComplete}
+          />
+        </div>
+        
+        <div className={`${isMobile ? 'w-full' : 'w-1/4 self-center'}`}>
+          <Controls 
+            onShoot={handleShoot}
+            disabled={isPlaying}
+            isMobile={isMobile}
+          />
+        </div>
+      </div>
       
       <div className="text-center mt-4 text-sm text-gray-300">
         <p>Shoot the red ball. Balls will only move when hit - the green ball determines your final reward!</p>
