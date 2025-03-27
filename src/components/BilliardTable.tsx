@@ -1,7 +1,6 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import { AimingSystem, BallPhysics, Zone } from '../utils/physics';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 interface BilliardTableProps {
   onBallStop: (result: { discount: number; name: string; color: string }) => void;
@@ -24,7 +23,6 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
   const goldZoneRef = useRef<HTMLDivElement>(null);
   const redZoneRef = useRef<HTMLDivElement>(null);
   const blueZoneRef = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile();
   
   const [physics, setPhysics] = useState<BallPhysics | null>(null);
   const [aiming, setAiming] = useState<AimingSystem | null>(null);
@@ -117,54 +115,18 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
             backgroundImage: `url("/cropedimage.jpg")`, 
             backgroundSize: 'contain',
             backgroundPosition: 'center',
-            position: 'relative',
-            transform: isMobile ? 'rotate(90deg)' : 'none',
-            }}>
+            position: 'relative',}}>
         <div className="billiard-border"></div>
-        <div ref={blueZoneRef} className="target-zone absolute rounded-full" style={{ 
-          width: '180px', 
-          height: '180px', 
-          backgroundColor: 'rgba(69, 123, 157, 0.7)',
-          transform: isMobile ? 'rotate(-90deg)' : 'none',
-        }}></div>
-        <div ref={redZoneRef} className="target-zone absolute rounded-full" style={{ 
-          width: '120px', 
-          height: '120px', 
-          backgroundColor: 'rgba(230, 57, 70, 0.7)',
-          transform: isMobile ? 'rotate(-90deg)' : 'none',
-        }}></div>
-        <div ref={goldZoneRef} className="target-zone absolute rounded-full" style={{ 
-          width: '70px', 
-          height: '70px', 
-          backgroundColor: 'rgba(255, 215, 0, 0.7)',
-          transform: isMobile ? 'rotate(-90deg)' : 'none',
-        }}></div>
-        <div ref={ballRef} className="ball absolute" style={{ 
-          backgroundColor: 'red', 
-          width: '30px', 
-          height: '30px', 
-          borderRadius: '50%',
-          transform: isMobile ? 'rotate(-90deg)' : 'none',
-        }}></div>
-        <div ref={ball2Ref} className="ball absolute" style={{ 
-          backgroundColor: 'blue', 
-          width: '30px', 
-          height: '30px', 
-          borderRadius: '50%',
-          transform: isMobile ? 'rotate(-90deg)' : 'none',
-        }}></div>
-        <div ref={ball3Ref} className="ball absolute" style={{ 
-          backgroundColor: 'green', 
-          width: '30px', 
-          height: '30px', 
-          borderRadius: '50%',
-          transform: isMobile ? 'rotate(-90deg)' : 'none',
-        }}></div>
+        <div ref={blueZoneRef} className="target-zone absolute rounded-full" style={{ width: '180px', height: '180px', backgroundColor: 'rgba(69, 123, 157, 0.7)' }}></div>
+        <div ref={redZoneRef} className="target-zone absolute rounded-full" style={{ width: '120px', height: '120px', backgroundColor: 'rgba(230, 57, 70, 0.7)' }}></div>
+        <div ref={goldZoneRef} className="target-zone absolute rounded-full" style={{ width: '70px', height: '70px', backgroundColor: 'rgba(255, 215, 0, 0.7)' }}></div>
+        <div ref={ballRef} className="ball absolute" style={{ backgroundColor: 'red', width: '30px', height: '30px', borderRadius: '50%' }}></div>
+        <div ref={ball2Ref} className="ball absolute" style={{ backgroundColor: 'blue', width: '30px', height: '30px', borderRadius: '50%' }}></div>
+        <div ref={ball3Ref} className="ball absolute" style={{ backgroundColor: 'green', width: '30px', height: '30px', borderRadius: '50%' }}></div>
         <div ref={aimLineRef} className="aim-line absolute" style={{ 
           height: '2px', 
           backgroundColor: 'rgba(255, 255, 255, 0.7)', 
           transformOrigin: 'left center',
-          transform: isMobile ? 'rotate(-90deg)' : 'none',
         }}></div>
       </div>
     </div>

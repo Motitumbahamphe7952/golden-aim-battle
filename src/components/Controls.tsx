@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ControlsProps {
   onShoot: (power: number) => void;
@@ -11,7 +10,6 @@ interface ControlsProps {
 
 const Controls: React.FC<ControlsProps> = ({ onShoot, disabled }) => {
   const [power, setPower] = useState<number>(5);
-  const isMobile = useIsMobile();
   
   const handlePowerChange = (values: number[]) => {
     setPower(values[0]);
@@ -33,7 +31,7 @@ const Controls: React.FC<ControlsProps> = ({ onShoot, disabled }) => {
             step={1}
             onValueChange={handlePowerChange}
             disabled={disabled}
-            className={`w-full ${isMobile ? 'max-w-[150px]' : 'sm:w-[200px]'}`}
+            className="w-full sm:w-[200px]"
           />
           <span className="min-w-[30px] text-center text-white font-medium">{power}</span>
         </div>
