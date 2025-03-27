@@ -6,7 +6,7 @@ const Index: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#1a1a2e] to-[#16213e] text-white">
       <header className="py-8 text-center">
-        <h1 className="text-4xl font-bold tracking-tight mb-2">Golden Shot</h1>
+        <h1 className="text-4xl font-bold tracking-tight mb-2">Lucky Shot</h1>
         <p className="text-lg text-gray-300 max-w-md mx-auto">Aim precisely to hit the target zones and win amazing discounts</p>
       </header>
       

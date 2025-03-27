@@ -23,6 +23,7 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
   const goldZoneRef = useRef<HTMLDivElement>(null);
   const redZoneRef = useRef<HTMLDivElement>(null);
   const blueZoneRef = useRef<HTMLDivElement>(null);
+  const whiteZoneRef = useRef<HTMLDivElement>(null);
   
   const [physics, setPhysics] = useState<BallPhysics | null>(null);
   const [aiming, setAiming] = useState<AimingSystem | null>(null);
@@ -111,23 +112,59 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
 
   return (
     <div className="billiard-table">
-      <div className="billiard-inner" ref={tableRef} style={{ 
-            backgroundImage: `url("/cropedimage.jpg")`, 
-            backgroundSize: 'contain',
-            backgroundPosition: 'center',
-            position: 'relative',}}>
+      <div className="vignette-overlay">
+      <div className="billiard-inner" ref={tableRef} >
         <div className="billiard-border"></div>
-        <div ref={blueZoneRef} className="target-zone absolute rounded-full" style={{ width: '180px', height: '180px', backgroundColor: 'rgba(69, 123, 157, 0.7)' }}></div>
-        <div ref={redZoneRef} className="target-zone absolute rounded-full" style={{ width: '120px', height: '120px', backgroundColor: 'rgba(230, 57, 70, 0.7)' }}></div>
-        <div ref={goldZoneRef} className="target-zone absolute rounded-full" style={{ width: '70px', height: '70px', backgroundColor: 'rgba(255, 215, 0, 0.7)' }}></div>
-        <div ref={ballRef} className="ball absolute" style={{ backgroundColor: 'red', width: '30px', height: '30px', borderRadius: '50%' }}></div>
-        <div ref={ball2Ref} className="ball absolute" style={{ backgroundColor: 'blue', width: '30px', height: '30px', borderRadius: '50%' }}></div>
-        <div ref={ball3Ref} className="ball absolute" style={{ backgroundColor: 'green', width: '30px', height: '30px', borderRadius: '50%' }}></div>
-        <div ref={aimLineRef} className="aim-line absolute" style={{ 
-          height: '2px', 
-          backgroundColor: 'rgba(255, 255, 255, 0.7)', 
-          transformOrigin: 'left center',
-        }}></div>
+        <div ref={whiteZoneRef} className="target-zone absolute rounded-full" style={{ width: '300px', height: '300px', backgroundColor: 'rgba(255, 255, 255, 0.7)' }}></div>
+        <div ref={blueZoneRef} className="target-zone absolute rounded-full" style={{ width: '180px', height: '180px', backgroundColor: 'rgba(0, 119, 182, 0.7)' }}></div>
+        <div ref={redZoneRef} className="target-zone absolute rounded-full" style={{ width: '120px', height: '120px', backgroundColor: 'rgba(214, 40, 40, 0.7)' }}></div>
+        <div ref={goldZoneRef} className="target-zone absolute rounded-full" style={{ width: '50px', height: '50px', backgroundColor: 'rgba(255, 215, 0, 0.7)' }}></div>
+        {/* <div ref={ballRef} className="ball absolute" style={{  background-image: url("/public/transparentbgball.png"), width: '30px', height: '30px', borderRadius: '50%' }}></div> */}
+            <div
+            ref={ballRef}
+            className="absolute bg-transparent"
+            style={{
+              backgroundImage: `url("/cueball.png")`, // ✅ Notice: no "/public"
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center center',
+              backgroundSize: 'contain', // Optional: ensures it fills the div
+              backgroundColor: 'transparent',
+              width: '50px',
+              height: '50px',
+              borderRadius: '50%',
+            }}
+          ></div>
+
+        <div ref={ball2Ref} className="absolute bg-transparent"  style={{
+              backgroundImage: `url("/redpoolball.png")`, // ✅ Notice: no "/public"
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center center',
+              backgroundSize: 'cover', // Optional: ensures it fills the div
+              backgroundColor: 'transparent',
+              width: '60px',
+              height: '60px',
+              borderRadius: '50%',
+            }}></div>
+        <div ref={ball3Ref} className="absolute bg-transparent"  style={{
+              backgroundImage: `url("/transparentbgball.png")`, // ✅ Notice: no "/public"
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center center',
+              backgroundSize: 'cover', // Optional: ensures it fills the div
+              backgroundColor: 'transparent',
+              width: '60px',
+              height: '60px',
+              borderRadius: '50%',
+            }}></div>
+        <div ref={aimLineRef} className="aim-line absolute"  style={{
+              backgroundImage: `url("/stick.png")`, // ✅ Notice: no "/public"
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center center',
+              backgroundSize: 'cover', // Optional: ensures it fills the div
+              backgroundColor: 'transparent',
+              width: '60px',
+              height: '6px',
+            }}></div>
+      </div>
       </div>
     </div>
   );
