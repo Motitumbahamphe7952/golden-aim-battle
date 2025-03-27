@@ -82,21 +82,18 @@
   .billiard-table {
     @apply relative w-full aspect-video rounded-3xl overflow-hidden cursor-crosshair;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    /* transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); */
   }
 
   .billiard-inner {
     @apply absolute top-0 left-0 w-full h-full bg-game-table;
-    /* transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); */
   }
 
   .billiard-border {
     @apply absolute top-0 left-0 w-full h-full border-[13px] border-game-border rounded-3xl;
-    /* transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); */
   }
 
   .ball {
-    @apply absolute bg-game-red rounded-full shadow-md ;
+    @apply absolute bg-game-red rounded-full shadow-md;
     width: 20px;
     height: 20px;
     transition: box-shadow 0.3s ease;
@@ -119,14 +116,31 @@
   }
 
   .controls-container {
-    @apply flex flex-col sm:flex-row justify-center items-center gap-5 mt-6 w-full;
+    @apply flex flex-col justify-center items-center gap-5 mt-4 w-full;
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   }
 
+  /* Mobile-specific styles */
+  @media (max-width: 767px) {
+    .controls-container {
+      @apply mt-2 gap-3;
+    }
+    
+    .billiard-table {
+      @apply aspect-[3/4] max-h-[70vh] mx-auto;
+    }
+  }
+
   .slider-container {
-    @apply relative flex items-center bg-white bg-opacity-10 backdrop-blur-md rounded-full px-4 py-2 w-full sm:w-auto;
+    @apply relative flex items-center bg-white bg-opacity-10 backdrop-blur-md rounded-full px-4 py-2 w-full;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
+  }
+
+  @media (min-width: 640px) {
+    .slider-container {
+      @apply w-auto;
+    }
   }
 
   .power-slider {
