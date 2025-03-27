@@ -49,13 +49,15 @@ const GameContainer: React.FC = () => {
   
   return (
     <div className="max-w-4xl w-full mx-auto px-4 sm:px-2 animate-fade-in">
-      <style jsx>{`
-        .aim-line.locked {
-          background-color: rgba(255, 0, 0, 0.8);
-          height: 3px;
-          box-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
-        }
-      `}</style>
+      <style>
+        {`
+          .aim-line.locked {
+            background-color: rgba(255, 0, 0, 0.8);
+            height: 3px;
+            box-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
+          }
+        `}
+      </style>
       
       <BilliardTable 
         key={gameKey} // Force re-render when key changes
@@ -72,7 +74,7 @@ const GameContainer: React.FC = () => {
       
       <div className="text-center mt-4 text-sm text-gray-300">
         <p>Shoot the red ball. Balls will only move when hit - the green ball determines your final reward!</p>
-        <p className="mt-1">Right-click or extend the aim line fully to lock your aim.</p>
+        <p className="mt-1">Click on the table to lock your aim.</p>
       </div>
       
       <Dialog open={showResult} onOpenChange={setShowResult}>
