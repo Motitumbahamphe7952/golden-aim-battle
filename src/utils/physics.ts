@@ -301,6 +301,7 @@ export class AimingSystem {
   private table: HTMLElement;
   private angle: number = 0;
   private maxLength: number = 300;
+  private isAimLocked: boolean = false;
   
   constructor(props: AimingSystemProps) {
     this.ball = props.ball;
@@ -311,7 +312,33 @@ export class AimingSystem {
   }
 
   private setupEventListeners(): void {
-    this.table.addEventListener('mousemove', this.updateAimLine.bind(this));
+    this.table.addEventListener('mousemove', this.handleMouseMove.bind(this));
+    this.table.addEventListener('contextmenu', this.handleRightClick.bind(this));
+  }
+
+  private handleMouseMove(event: MouseEvent): void {
+    if (this.isAimLocked) return;
+    
+    this.updateAimLine(event);
+  }
+  
+  private handleRightClick(event: MouseEvent): void {
+    event.preventDefault(); // Prevent the context menu from showing
+    this.lockAim();
+  }
+  
+  public lockAim(): void {
+    this.isAimLocked = true;
+    this.aimLine.classList.add('locked');
+  }
+  
+  public unlockAim(): void {
+    this.isAimLocked = false;
+    this.aimLine.classList.remove('locked');
+  }
+  
+  public isLocked(): boolean {
+    return this.isAimLocked;
   }
 
   private updateAimLine(event: MouseEvent): void {
@@ -332,6 +359,11 @@ export class AimingSystem {
 
     // Calculate line length
     const length = Math.min(Math.sqrt(dx*dx + dy*dy), this.maxLength);
+    
+    // If the aim line is at max length, lock the aim
+    if (length >= this.maxLength && !this.isAimLocked) {
+      this.lockAim();
+    }
 
     // Update aim line
     this.aimLine.style.width = `${length}px`;
@@ -342,5 +374,9 @@ export class AimingSystem {
 
   public getAngle(): number {
     return this.angle;
+  }
+  
+  public reset(): void {
+    this.unlockAim();
   }
 }

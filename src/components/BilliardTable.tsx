@@ -84,6 +84,10 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
         physics.updateTableRect();
         physics.reset();
       }
+      
+      if (aiming) {
+        aiming.reset();
+      }
     };
     
     window.addEventListener('resize', handleResize);
@@ -95,6 +99,13 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
     if (shootTrigger && physics && aiming) {
       physics.shoot(aiming.getAngle(), power);
       onShootComplete();
+      
+      // Reset aiming after shooting
+      setTimeout(() => {
+        if (aiming) {
+          aiming.reset();
+        }
+      }, 100);
     }
   }, [shootTrigger, physics, aiming, power, onShootComplete]);
 
@@ -112,7 +123,11 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
         <div ref={ballRef} className="ball absolute" style={{ backgroundColor: 'red', width: '30px', height: '30px', borderRadius: '50%' }}></div>
         <div ref={ball2Ref} className="ball absolute" style={{ backgroundColor: 'blue', width: '30px', height: '30px', borderRadius: '50%' }}></div>
         <div ref={ball3Ref} className="ball absolute" style={{ backgroundColor: 'green', width: '30px', height: '30px', borderRadius: '50%' }}></div>
-        <div ref={aimLineRef} className="aim-line absolute" style={{ height: '2px', backgroundColor: 'rgba(255, 255, 255, 0.7)', transformOrigin: 'left center' }}></div>
+        <div ref={aimLineRef} className="aim-line absolute" style={{ 
+          height: '2px', 
+          backgroundColor: 'rgba(255, 255, 255, 0.7)', 
+          transformOrigin: 'left center',
+        }}></div>
       </div>
     </div>
   );
