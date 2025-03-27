@@ -1,7 +1,6 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import { AimingSystem, BallPhysics, Zone } from '../utils/physics';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 interface BilliardTableProps {
   onBallStop: (result: { discount: number; name: string; color: string }) => void;
@@ -27,7 +26,6 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
   
   const [physics, setPhysics] = useState<BallPhysics | null>(null);
   const [aiming, setAiming] = useState<AimingSystem | null>(null);
-  const isMobile = useIsMobile();
   
   // Initialize physics and aiming systems
   useEffect(() => {
@@ -112,10 +110,10 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
   }, [shootTrigger, physics, aiming, power, onShootComplete]);
 
   return (
-    <div className={`${isMobile ? 'aspect-[2/3]' : 'aspect-video'} billiard-table h-full w-full`}>
+    <div className="billiard-table">
       <div className="billiard-inner" ref={tableRef} style={{ 
             backgroundImage: `url("/cropedimage.jpg")`, 
-            backgroundSize: 'cover',
+            backgroundSize: 'contain',
             backgroundPosition: 'center',
             position: 'relative',}}>
         <div className="billiard-border"></div>
