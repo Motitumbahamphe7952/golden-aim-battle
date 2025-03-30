@@ -13,6 +13,9 @@ export interface Zone {
   discount: number;
   name: string;
   color: string;
+  innerRadius: number;
+  outerRadius: number;
+  
 }
 
 export interface BallPhysicsProps {
@@ -106,7 +109,7 @@ export class BallPhysics {
     
     const angleRad = angle * Math.PI / 180;
     const baseSpeed = this.tableRect.width * 0.05;
-    const speedMultiplier = power / 8;
+    const speedMultiplier = power / 10;
 
     const cueBall = this.balls[0];
     cueBall.velocity = {
@@ -240,7 +243,36 @@ export class BallPhysics {
 
     this.onBallStop(result);
   }
+// }
+// private checkZone(ball: BallState): void {
+//   const ballRect = ball.element.getBoundingClientRect();
+//   const ballCenterX = ballRect.left + ballRect.width / 2;
+//   const ballCenterY = ballRect.top + ballRect.height / 2;
+
+//   const tableRect = this.table.getBoundingClientRect();
+//   const tableCenterX = tableRect.left + tableRect.width / 2;
+//   const tableCenterY = tableRect.top + tableRect.height / 2;
+
+//   const distanceFromCenter = Math.sqrt(
+//     Math.pow(ballCenterX - tableCenterX, 2) +
+//     Math.pow(ballCenterY - tableCenterY, 2)
+//   );
+
+//   let foundZone = { discount: 0, name: 'No Zone', color: 'gray' };
+
+//   for (const zone of this.zones) {
+//     if (distanceFromCenter >= zone.innerRadius && distanceFromCenter <= zone.outerRadius) {
+//       foundZone = { discount: zone.discount, name: zone.name, color: zone.color };
+//       break;
+//     }
+//   }
+
+//   this.onBallStop(foundZone);
+// }
+
+
 }
+
 
 export interface AimingSystemProps {
   ball: HTMLElement;

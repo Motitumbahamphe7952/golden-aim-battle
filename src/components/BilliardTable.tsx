@@ -45,30 +45,74 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
         table: tableRef.current
       });
       
-      // Set zones if refs are available
-      if (goldZoneRef.current && redZoneRef.current && blueZoneRef.current) {
-        // Order is important: largest to smallest for proper stacking
+      // // Set zones if refs are available
+      // if (goldZoneRef.current && redZoneRef.current && blueZoneRef.current) {
+      //   // Order is important: largest to smallest for proper stacking
+      //   const zones: Zone[] = [
+      //     { 
+      //       element: whiteZoneRef.current, 
+      //       discount: 5, 
+      //       name: 'Blue Zone',
+      //       color: 'blue'
+      //     },
+      //     { 
+      //       element: blueZoneRef.current, 
+      //       discount: 20, 
+      //       name: 'Blue Zone',
+      //       color: 'blue'
+      //     },
+      //     { 
+      //       element: redZoneRef.current, 
+      //       discount: 30, 
+      //       name: 'Red Zone',
+      //       color: 'red'
+      //     },
+      //     { 
+      //       element: goldZoneRef.current, 
+      //       discount: 40, 
+      //       name: 'Golden Zone',
+      //       color: 'gold'
+      //     }
+      //   ];
+        
+      //   newPhysics.setZones(zones);
+      // }
+      if (goldZoneRef.current && redZoneRef.current && blueZoneRef.current && whiteZoneRef.current) {
         const zones: Zone[] = [
           { 
-            element: blueZoneRef.current, 
-            discount: 20, 
-            name: 'Blue Zone',
-            color: 'blue'
+            element: goldZoneRef.current, 
+            discount: 50, 
+            name: 'Golden Zone',
+            color: 'gold',
+            innerRadius: 0,
+            outerRadius: goldZoneRef.current.offsetWidth / 2
           },
           { 
             element: redZoneRef.current, 
-            discount: 30, 
+            discount: 20, 
             name: 'Red Zone',
-            color: 'red'
+            color: 'red',
+            innerRadius: goldZoneRef.current.offsetWidth / 2,
+            outerRadius: redZoneRef.current.offsetWidth / 2
           },
           { 
-            element: goldZoneRef.current, 
-            discount: 40, 
-            name: 'Golden Zone',
-            color: 'gold'
+            element: blueZoneRef.current, 
+            discount: 10, 
+            name: 'Blue Zone',
+            color: 'blue',
+            innerRadius: redZoneRef.current.offsetWidth / 2,
+            outerRadius: blueZoneRef.current.offsetWidth / 2
+          },
+          { 
+            element: whiteZoneRef.current, 
+            discount: 5, 
+            name: 'White Zone',
+            color: 'white',
+            innerRadius: blueZoneRef.current.offsetWidth / 2,
+            outerRadius: whiteZoneRef.current.offsetWidth / 2
           }
         ];
-        
+      
         newPhysics.setZones(zones);
       }
       
@@ -115,11 +159,11 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
       <div className="vignette-overlay">
       <div className="billiard-inner" ref={tableRef} >
         <div className="billiard-border"></div>
-        <div ref={whiteZoneRef} className="target-zone absolute rounded-full" style={{ width: '300px', height: '300px', backgroundColor: 'rgba(255, 255, 255, 0.7)' }}></div>
+        <div ref={whiteZoneRef} className="target-zone absolute rounded-full " style={{ width: '300px', height: '300px', backgroundColor: 'rgba(255, 255, 255, 0.7)' }}></div>
         <div ref={blueZoneRef} className="target-zone absolute rounded-full" style={{ width: '180px', height: '180px', backgroundColor: 'rgba(0, 119, 182, 0.7)' }}></div>
-        <div ref={redZoneRef} className="target-zone absolute rounded-full" style={{ width: '120px', height: '120px', backgroundColor: 'rgba(214, 40, 40, 0.7)' }}></div>
-        <div ref={goldZoneRef} className="target-zone absolute rounded-full" style={{ width: '50px', height: '50px', backgroundColor: 'rgba(255, 215, 0, 0.7)' }}></div>
-        {/* <div ref={ballRef} className="ball absolute" style={{  background-image: url("/public/transparentbgball.png"), width: '30px', height: '30px', borderRadius: '50%' }}></div> */}
+        <div ref={redZoneRef} className="target-zone absolute rounded-full " style={{ width: '120px', height: '120px', backgroundColor: 'rgba(214, 40, 40, 0.7)' }}></div>
+        <div ref={goldZoneRef} className="target-zone absolute rounded-full " style={{ width: '50px', height: '50px', backgroundColor: 'rgba(255, 215, 0, 0.7)' }}></div>
+
             <div
             ref={ballRef}
             className="absolute bg-transparent"

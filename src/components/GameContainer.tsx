@@ -24,12 +24,14 @@ const GameContainer: React.FC = () => {
   };
   
   const getZone = (result: { discount: number; name: string; color: string }) => {
-    if (result.discount === 20) {
-      return { discount: 20, name: 'Blue Zone', color: 'blue' };
-    } else if (result.discount === 30) {
-      return { discount: 30, name: 'Red Zone', color: 'red' };
-    } else if (result.discount === 40) {
-      return { discount: 40, name: 'Golden Zone', color: 'golden' };
+    if (result.discount === 5) {
+      return { discount: 5, name: 'white Zone', color: 'white' };
+    } else if (result.discount === 10) {
+      return { discount: 10, name: 'blue Zone', color: 'blue' };
+    } else if (result.discount === 20) {
+      return { discount: 20, name: 'red Zone', color: 'red' };
+    } else if (result.discount === 50){
+      return { discount: 50, name: 'golden Zone', color: 'golden' };
     } else {
       return { discount: 0, name: 'No Zone', color: 'gray' };
     }
@@ -84,7 +86,7 @@ const GameContainer: React.FC = () => {
               {result?.discount > 0 ? `${result.discount}% Discount!` : 'No Discount'}
             </DialogTitle>
             <DialogDescription className="text-center">
-              Your green ball landed in the {result?.name}!
+              Your yellow ball landed in the {result?.name}!
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-center mt-4">
