@@ -58,6 +58,7 @@ const GameContainer: React.FC = () => {
   };
 
   return (
+    <div>
     <div className={`${isMobile ? 'w-full h-full relative' : 'max-w-4xl w-full mx-auto px-2 sm:px-4'} animate-fade-in flex flex-col items-center`}>
       <div className="w-full h-full" onDoubleClick={handleDoubleClick}>
         <BilliardTable
@@ -68,12 +69,7 @@ const GameContainer: React.FC = () => {
           onShootComplete={handleShootComplete}
         />
       </div>
-      <div className={`${isMobile ? 'absolute bottom-4 w-full px-4' : 'w-full sm:w-auto px-4 mt-2 sm:mt-6'}`}>
-        <Controls
-          onShoot={handleShoot}
-          disabled={isPlaying}
-        />
-      </div>
+     
 
       <div className="text-center mt-4 text-sm text-gray-300 mobile-hide">
         <p>Shoot the red ball. Balls will only move when hit - the green ball determines your final reward!</p>
@@ -95,6 +91,13 @@ const GameContainer: React.FC = () => {
           </div>
         </DialogContent>
       </Dialog>
+    </div>
+    <div className={`${isMobile ? 'absolute bottom-4 w-full px-4' : 'w-full sm:w-auto px-4 mt-2 sm:mt-6'}`}>
+        <Controls
+          onShoot={handleShoot}
+          disabled={isPlaying}
+        />
+      </div>
     </div>
   );
 };

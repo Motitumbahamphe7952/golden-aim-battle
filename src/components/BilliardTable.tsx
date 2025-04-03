@@ -44,39 +44,7 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
         aimLine: aimLineRef.current,
         table: tableRef.current
       });
-      
-      // // Set zones if refs are available
-      // if (goldZoneRef.current && redZoneRef.current && blueZoneRef.current) {
-      //   // Order is important: largest to smallest for proper stacking
-      //   const zones: Zone[] = [
-      //     { 
-      //       element: whiteZoneRef.current, 
-      //       discount: 5, 
-      //       name: 'Blue Zone',
-      //       color: 'blue'
-      //     },
-      //     { 
-      //       element: blueZoneRef.current, 
-      //       discount: 20, 
-      //       name: 'Blue Zone',
-      //       color: 'blue'
-      //     },
-      //     { 
-      //       element: redZoneRef.current, 
-      //       discount: 30, 
-      //       name: 'Red Zone',
-      //       color: 'red'
-      //     },
-      //     { 
-      //       element: goldZoneRef.current, 
-      //       discount: 40, 
-      //       name: 'Golden Zone',
-      //       color: 'gold'
-      //     }
-      //   ];
-        
-      //   newPhysics.setZones(zones);
-      // }
+
       if (goldZoneRef.current && redZoneRef.current && blueZoneRef.current && whiteZoneRef.current) {
         const zones: Zone[] = [
           { 
@@ -160,7 +128,7 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
       <div className="billiard-inner" ref={tableRef} >
         <div className="billiard-border"></div>
               {/* 🎯 Zones Container - All zones stacked */}
-              <div className="zones-container">
+          <div className="zones-container">
           <div
             ref={whiteZoneRef}
             className="target-zone"
@@ -247,7 +215,7 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
               backgroundPosition: 'center center',
               backgroundSize: 'cover', // Optional: ensures it fills the div
               backgroundColor: 'transparent',
-              width: window.innerWidth < 768 ? '50px' : '60px',
+              width: window.innerWidth < 768 ? '180px' : '120px',
               height: '6px',
               zIndex: 5 // Ensure the aim line is on top of the zones
             }}></div>
