@@ -582,6 +582,8 @@
     background-size: contain; /* Ensure the stick image scales properly */
     z-index: 10; /* Ensure it’s above other elements */
     opacity: 1; /* Prevent it from being hidden */
+ 
+ 
   }
   .ball {
     position: absolute;
