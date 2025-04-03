@@ -109,7 +109,7 @@ export class BallPhysics {
     
     const angleRad = angle * Math.PI / 180;
     const baseSpeed = this.tableRect.width * 0.05;
-    const speedMultiplier = power / 10;
+    const speedMultiplier = power / 5;
 
     const cueBall = this.balls[0];
     cueBall.velocity = {
@@ -219,28 +219,49 @@ export class BallPhysics {
     ball.element.style.top = `${ball.position.y}px`;
   }
 
+  // private checkZone(ball: BallState): void {
+  //   const ballRect = ball.element.getBoundingClientRect();
+  //   let result = { discount: 0, name: 'No Zone', color: 'gray' };
+    
+  //   this.zones.forEach(zone => {
+  //     const zoneRect = zone.element.getBoundingClientRect();
+      
+  //     const ballCenterX = ballRect.left + ballRect.width / 2;
+  //     const ballCenterY = ballRect.top + ballRect.height / 2;
+      
+  //     const zoneCenterX = zoneRect.left + zoneRect.width / 2;
+  //     const zoneCenterY = zoneRect.top + zoneRect.height / 2;
+      
+  //     const dx = ballCenterX - zoneCenterX;
+  //     const dy = ballCenterY - zoneCenterY;
+  //     const distance = Math.sqrt(dx * dx + dy * dy);
+      
+  //     if (distance <= zoneRect.width / 2) {
+  //       result = zone;
+  //     }
+  //   });
+
+  //   this.onBallStop(result);
+  // }
   private checkZone(ball: BallState): void {
     const ballRect = ball.element.getBoundingClientRect();
     let result = { discount: 0, name: 'No Zone', color: 'gray' };
-    
+  
     this.zones.forEach(zone => {
       const zoneRect = zone.element.getBoundingClientRect();
-      
-      const ballCenterX = ballRect.left + ballRect.width / 2;
-      const ballCenterY = ballRect.top + ballRect.height / 2;
-      
       const zoneCenterX = zoneRect.left + zoneRect.width / 2;
       const zoneCenterY = zoneRect.top + zoneRect.height / 2;
-      
+      const ballCenterX = ballRect.left + ballRect.width / 2;
+      const ballCenterY = ballRect.top + ballRect.height / 2;
       const dx = ballCenterX - zoneCenterX;
       const dy = ballCenterY - zoneCenterY;
       const distance = Math.sqrt(dx * dx + dy * dy);
-      
-      if (distance <= zoneRect.width / 2) {
+  
+      if (distance >= zone.innerRadius && distance <= zone.outerRadius) {
         result = zone;
       }
     });
-
+  
     this.onBallStop(result);
   }
 // }

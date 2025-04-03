@@ -80,20 +80,12 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
       if (goldZoneRef.current && redZoneRef.current && blueZoneRef.current && whiteZoneRef.current) {
         const zones: Zone[] = [
           { 
-            element: goldZoneRef.current, 
-            discount: 50, 
-            name: 'Golden Zone',
-            color: 'gold',
-            innerRadius: 0,
-            outerRadius: goldZoneRef.current.offsetWidth / 2
-          },
-          { 
-            element: redZoneRef.current, 
-            discount: 20, 
-            name: 'Red Zone',
-            color: 'red',
-            innerRadius: goldZoneRef.current.offsetWidth / 2,
-            outerRadius: redZoneRef.current.offsetWidth / 2
+            element: whiteZoneRef.current, 
+            discount: 5, 
+            name: 'White Zone',
+            color: 'white',
+            innerRadius: blueZoneRef.current.offsetWidth / 2,
+            outerRadius: whiteZoneRef.current.offsetWidth / 2
           },
           { 
             element: blueZoneRef.current, 
@@ -104,13 +96,21 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
             outerRadius: blueZoneRef.current.offsetWidth / 2
           },
           { 
-            element: whiteZoneRef.current, 
-            discount: 5, 
-            name: 'White Zone',
-            color: 'white',
-            innerRadius: blueZoneRef.current.offsetWidth / 2,
-            outerRadius: whiteZoneRef.current.offsetWidth / 2
-          }
+            element: redZoneRef.current, 
+            discount: 20, 
+            name: 'Red Zone',
+            color: 'red',
+            innerRadius: goldZoneRef.current.offsetWidth / 2,
+            outerRadius: redZoneRef.current.offsetWidth / 2
+          },
+          { 
+            element: goldZoneRef.current, 
+            discount: 50, 
+            name: 'Golden Zone',
+            color: 'gold',
+            innerRadius: 0,
+            outerRadius: goldZoneRef.current.offsetWidth / 2
+          },  
         ];
       
         newPhysics.setZones(zones);
@@ -159,10 +159,49 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
       <div className="vignette-overlay">
       <div className="billiard-inner" ref={tableRef} >
         <div className="billiard-border"></div>
-        <div ref={whiteZoneRef} className="target-zone absolute rounded-full " style={{ width: '300px', height: '300px', backgroundColor: 'rgba(255, 255, 255, 0.7)' }}></div>
-        <div ref={blueZoneRef} className="target-zone absolute rounded-full" style={{ width: '180px', height: '180px', backgroundColor: 'rgba(0, 119, 182, 0.7)' }}></div>
-        <div ref={redZoneRef} className="target-zone absolute rounded-full " style={{ width: '120px', height: '120px', backgroundColor: 'rgba(214, 40, 40, 0.7)' }}></div>
-        <div ref={goldZoneRef} className="target-zone absolute rounded-full " style={{ width: '50px', height: '50px', backgroundColor: 'rgba(255, 215, 0, 0.7)' }}></div>
+              {/* 🎯 Zones Container - All zones stacked */}
+              <div className="zones-container">
+          <div
+            ref={whiteZoneRef}
+            className="target-zone"
+            style={{
+              width: window.innerWidth < 768 ? '200px' : '300px',
+              height: window.innerWidth < 768 ? '200px' : '300px',
+              backgroundColor: 'rgba(255, 255, 255, 0.7)',
+              zIndex: 1
+            }}
+          />
+          <div
+            ref={blueZoneRef}
+            className="target-zone"
+            style={{
+              width: window.innerWidth < 768 ? '120px' : '180px',
+              height: window.innerWidth < 768 ? '120px' : '180px',
+              backgroundColor: 'rgba(0, 119, 182, 0.7)',
+              zIndex: 2
+            }}
+          />
+          <div
+            ref={redZoneRef}
+            className="target-zone"
+            style={{
+              width: window.innerWidth < 768 ? '80px' : '120px',
+              height: window.innerWidth < 768 ? '80px' : '120px',
+              backgroundColor: 'rgba(214, 40, 40, 0.7)',
+              zIndex: 3
+            }}
+          />
+          <div
+            ref={goldZoneRef}
+            className="target-zone"
+            style={{
+              width: window.innerWidth < 768 ? '30px' : '50px',
+              height: window.innerWidth < 768 ? '30px' : '50px',
+              backgroundColor: 'rgba(255, 215, 0, 0.7)',
+              zIndex: 4
+            }}
+          />
+        </div>
 
             <div
             ref={ballRef}
@@ -173,9 +212,10 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
               backgroundPosition: 'center center',
               backgroundSize: 'contain', // Optional: ensures it fills the div
               backgroundColor: 'transparent',
-              width: '50px',
-              height: '50px',
+              width: window.innerWidth < 768 ? '30px' : '50px',
+              height: window.innerWidth < 768 ? '30px' : '50px',
               borderRadius: '50%',
+              zIndex: 5 // Ensure the cue ball is on top of the zones
             }}
           ></div>
 
@@ -185,9 +225,10 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
               backgroundPosition: 'center center',
               backgroundSize: 'cover', // Optional: ensures it fills the div
               backgroundColor: 'transparent',
-              width: '60px',
-              height: '60px',
+              width: window.innerWidth < 768 ? '40px' : '60px',
+            height: window.innerWidth < 768 ? '40px' : '60px',
               borderRadius: '50%',
+              zIndex: 5 // Ensure the red ball is on top of the zones
             }}></div>
         <div ref={ball3Ref} className="absolute bg-transparent"  style={{
               backgroundImage: `url("/transparentbgball.png")`, // ✅ Notice: no "/public"
@@ -195,9 +236,10 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
               backgroundPosition: 'center center',
               backgroundSize: 'cover', // Optional: ensures it fills the div
               backgroundColor: 'transparent',
-              width: '60px',
-              height: '60px',
+              width: window.innerWidth < 768 ? '40px' : '60px',
+              height: window.innerWidth < 768 ? '40px' : '60px',
               borderRadius: '50%',
+              zIndex: 5 // Ensure the red ball is on top of the zones
             }}></div>
         <div ref={aimLineRef} className="aim-line absolute"  style={{
               backgroundImage: `url("/stick.png")`, // ✅ Notice: no "/public"
@@ -205,8 +247,9 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
               backgroundPosition: 'center center',
               backgroundSize: 'cover', // Optional: ensures it fills the div
               backgroundColor: 'transparent',
-              width: '60px',
+              width: window.innerWidth < 768 ? '50px' : '60px',
               height: '6px',
+              zIndex: 5 // Ensure the aim line is on top of the zones
             }}></div>
       </div>
       </div>

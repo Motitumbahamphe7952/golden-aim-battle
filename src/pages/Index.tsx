@@ -1,20 +1,23 @@
 
 import React from 'react';
 import GameContainer from '@/components/GameContainer';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Index: React.FC = () => {
+  const isMobile = useIsMobile();
+
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#1a1a2e] to-[#16213e] text-white">
-      <header className="py-8 text-center">
-        <h1 className="text-4xl font-bold tracking-tight mb-2">Lucky Shot</h1>
-        <p className="text-lg text-gray-300 max-w-md mx-auto">Aim precisely to hit the target zones and win amazing discounts</p>
+    <div className={`min-h-screen max-h-screen flex flex-col bg-gradient-to-b from-[#1a1a2e] to-[#16213e] text-white ${isMobile ? 'p-0 overflow-hidden' : ''}`}>
+      <header className="py-4 sm:py-8 text-center mobile-hide">
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-1 sm:mb-2">Lucky Shot</h1>
+        <p className="text-base sm:text-lg text-gray-300 max-w-md mx-auto">Aim precisely to hit the target zones and win amazing discounts</p>
       </header>
       
-      <main className="flex-1 flex items-center justify-center py-8">
+      <main className={`flex-1 flex items-center justify-center ${isMobile ? 'p-0 w-full h-full overflow-hidden' : 'py-4 sm:py-8'}`}>
         <GameContainer />
       </main>
       
-      <footer className="py-6 text-center text-sm text-gray-400">
+      <footer className="py-3 sm:py-6 text-center text-sm text-gray-400 mobile-hide">
         <p>Shoot the ball into golden zone for maximum discount</p>
       </footer>
     </div>
