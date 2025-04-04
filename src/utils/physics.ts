@@ -43,6 +43,8 @@ export class BallPhysics {
   private animationFrameId: number | null = null;
   private verticalOffset: number = 60; // Spacing between balls (now vertical)
 
+
+  
   constructor(props: BallPhysicsProps) {
     this.table = props.table;
     this.tableRect = this.table.getBoundingClientRect();
