@@ -125,7 +125,11 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
   return (
     <div className="billiard-table">
       <div className="vignette-overlay">
-      <div className="billiard-inner" ref={tableRef} >
+      <div className="billiard-inner" 
+      ref={tableRef} 
+      onTouchStart={(e) => e.preventDefault()} // Prevent default touch behaviors
+      onTouchMove={(e) => e.preventDefault()}
+      >
         <div className="billiard-border "></div>
               {/* 🎯 Zones Container - All zones stacked */}
           <div className="zones-container">

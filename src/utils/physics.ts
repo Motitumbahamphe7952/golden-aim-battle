@@ -271,6 +271,32 @@ export class AimingSystem {
   private setupEventListeners(): void {
     this.table.addEventListener('mousemove', this.handleMouseMove.bind(this));
     this.table.addEventListener('click', this.handleClick.bind(this));
+    this.table.addEventListener('touchstart', this.handleTouchStart.bind(this));
+    this.table.addEventListener('touchmove', this.handleTouchMove.bind(this));
+    this.table.addEventListener('touchend', this.handleTouchEnd.bind(this));
+  }
+  
+
+  private handleTouchStart(event: TouchEvent): void {
+    event.preventDefault();
+    if (this.isAimLocked) return;
+    this.handleTouchMove(event);
+  }
+
+  private handleTouchMove(event: TouchEvent): void {
+    event.preventDefault();
+    if (this.isAimLocked) return;
+    
+    const touch = event.touches[0];
+    this.updateAimLine({
+      clientX: touch.clientX,
+      clientY: touch.clientY,
+    } as MouseEvent);
+  }
+
+  private handleTouchEnd(event: TouchEvent): void {
+    event.preventDefault();
+    this.lockAim();
   }
 
   private handleMouseMove(event: MouseEvent): void {

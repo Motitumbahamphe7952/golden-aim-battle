@@ -39,6 +39,7 @@ const Controls: React.FC<ControlsProps> = ({ onShoot, disabled }) => {
       
       <Button
         onClick={handleShoot}
+        onTouchEnd={handleShoot}
         disabled={disabled}
         className="bg-primary hover:bg-primary/90 transition-all duration-300 ease-out px-8 py-2 text-white rounded-full"
       >
