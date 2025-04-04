@@ -59,7 +59,7 @@ const GameContainer: React.FC = () => {
 
   return (
     <div>
-    <div className={`${isMobile ? 'w-full h-full  overflow-hidden' : 'max-w-4xl w-full mx-auto px-2 sm:px-4'} animate-fade-in flex flex-col items-center`}>
+    <div className={`${isMobile ? 'w-full h-full  overflow-hidden' : 'max-w-4xl w-full mx-auto my-auto px-2 sm:px-4'} animate-fade-in flex flex-col items-center`}>
       <div className="w-full h-full" onDoubleClick={handleDoubleClick}>
         <BilliardTable
           key={gameKey}

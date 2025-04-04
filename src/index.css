@@ -63,9 +63,8 @@
 
 @layer components {
   .billiard-table {
-    @apply relative w-full aspect-video rounded-3xl  cursor-crosshair;
+    @apply relative w-full aspect-video rounded-3xl overflow-hidden cursor-crosshair;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    overflow: visible !important;
 
   }
   .billiard-inner {
@@ -89,13 +88,8 @@
     @apply absolute bg-white bg-opacity-50 pointer-events-none;
     height: 3px;
     width: 5px;
-    transform-origin: left center !important;
+    transform-origin: left center;
     transition: opacity 0.2s ease;
-    overflow: visible !important;
-    z-index: 20; /* Ensure it's above the table */
-    pointer-events: none !important;
-    will-change: transform, opacity; /* Optimize animations */
-
 
   }
   .aim-line.locked {
@@ -155,8 +149,8 @@
     justify-content: center;
     align-items: center;
     margin: 0;
+    overflow: hidden;
     position: relative;
-    touch-action: none;
   }
 
   .billiard-inner {
