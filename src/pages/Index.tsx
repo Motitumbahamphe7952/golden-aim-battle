@@ -13,7 +13,7 @@ const Index: React.FC = () => {
         <p className="text-base sm:text-lg text-gray-300 max-w-md mx-auto">Aim precisely to hit the target zones and win amazing discounts</p>
       </header>
  
-      <main className={`flex flex-grow items-center justify-center ${isMobile ? 'p-0 w-full h-full' : 'py-4 sm:py-8'}`}>
+      <main className={`flex items-center justify-center ${isMobile ? 'p-0 w-full h-full' : 'py-4 sm:py-8'}`}>
         <GameContainer />
       </main>
 
