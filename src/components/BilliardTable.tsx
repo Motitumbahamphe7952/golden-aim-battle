@@ -213,7 +213,9 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
               borderRadius: '50%',
               zIndex: 5 // Ensure the red ball is on top of the zones
             }}></div>
-        <div ref={aimLineRef} className="aim-line  absolute"  style={{
+            
+      </div>
+      <div ref={aimLineRef} className="aim-line  absolute"  style={{
               backgroundImage: `url("/poolstick3d.png")`, 
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center center',
@@ -221,10 +223,10 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
               backgroundColor: 'transparent',
               width: window.innerWidth < 768 ? '300px' : '120px',
               height: '10px',
-              zIndex: 5 // Ensure the aim line is on top of the zones
+              zIndex: 20 // Ensure the aim line is on top of the zones
             }}></div>
       </div>
-      </div>
+      
     </div>
   );
 };

@@ -257,7 +257,7 @@ export class AimingSystem {
   private aimLine: HTMLElement;
   private table: HTMLElement;
   private angle: number = 0;
-  private maxLength: number = 300;
+  private maxLength: number = 600;
   private isAimLocked: boolean = false;
   
   constructor(props: AimingSystemProps) {
@@ -338,12 +338,16 @@ export class AimingSystem {
     const dy = mouseY - ballCenterY;
     this.angle = Math.atan2(dy, dx) * 180 / Math.PI;
 
-    const length = Math.min(Math.sqrt(dx*dx + dy*dy), this.maxLength);
+    // const length = Math.min(Math.sqrt(dx*dx + dy*dy), this.maxLength);
+    const length = Math.sqrt(dx*dx + dy*dy) + 100;
 
     this.aimLine.style.width = `${length}px`;
     this.aimLine.style.left = `${ballCenterX}px`;
     this.aimLine.style.top = `${ballCenterY}px`;
     this.aimLine.style.transform = `rotate(${this.angle}deg)`;
+    this.aimLine.style.transformOrigin = 'left center';
+
+    this.aimLine.style.transform += ' translateZ(0)';
   }
 
   public getAngle(): number {
