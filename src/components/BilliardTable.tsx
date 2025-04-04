@@ -126,15 +126,15 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
     <div className="billiard-table">
       <div className="vignette-overlay">
       <div className="billiard-inner" ref={tableRef} >
-        <div className="billiard-border"></div>
+        <div className="billiard-border "></div>
               {/* 🎯 Zones Container - All zones stacked */}
           <div className="zones-container">
           <div
             ref={whiteZoneRef}
             className="target-zone"
             style={{
-              width: window.innerWidth < 768 ? '200px' : '300px',
-              height: window.innerWidth < 768 ? '200px' : '300px',
+              width: window.innerWidth < 768 ? '150px' : '300px',
+              height: window.innerWidth < 768 ? '150px' : '300px',
               backgroundColor: 'rgba(255, 255, 255, 0.7)',
               zIndex: 1
             }}
@@ -143,8 +143,8 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
             ref={blueZoneRef}
             className="target-zone"
             style={{
-              width: window.innerWidth < 768 ? '120px' : '180px',
-              height: window.innerWidth < 768 ? '120px' : '180px',
+              width: window.innerWidth < 768 ? '90px' : '180px',
+              height: window.innerWidth < 768 ? '90px' : '180px',
               backgroundColor: 'rgba(0, 119, 182, 0.7)',
               zIndex: 2
             }}
@@ -153,8 +153,8 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
             ref={redZoneRef}
             className="target-zone"
             style={{
-              width: window.innerWidth < 768 ? '80px' : '120px',
-              height: window.innerWidth < 768 ? '80px' : '120px',
+              width: window.innerWidth < 768 ? '50px' : '120px',
+              height: window.innerWidth < 768 ? '50px' : '120px',
               backgroundColor: 'rgba(214, 40, 40, 0.7)',
               zIndex: 3
             }}
@@ -163,8 +163,8 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
             ref={goldZoneRef}
             className="target-zone"
             style={{
-              width: window.innerWidth < 768 ? '30px' : '50px',
-              height: window.innerWidth < 768 ? '30px' : '50px',
+              width: window.innerWidth < 768 ? '20px' : '50px',
+              height: window.innerWidth < 768 ? '20px' : '50px',
               backgroundColor: 'rgba(255, 215, 0, 0.7)',
               zIndex: 4
             }}
@@ -210,13 +210,13 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
               zIndex: 5 // Ensure the red ball is on top of the zones
             }}></div>
         <div ref={aimLineRef} className="aim-line absolute"  style={{
-              backgroundImage: `url("/poolstick3d.png")`, // ✅ Notice: no "/public"
+              backgroundImage: `url("/poolstick3d.png")`, 
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center center',
               backgroundSize: 'cover', // Optional: ensures it fills the div
               backgroundColor: 'transparent',
-              width: window.innerWidth < 768 ? '180px' : '120px',
-              height: '6px',
+              width: window.innerWidth < 768 ? '300px' : '120px',
+              height: '10px',
               zIndex: 5 // Ensure the aim line is on top of the zones
             }}></div>
       </div>

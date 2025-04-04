@@ -481,7 +481,7 @@
   }
   .aim-line.locked {
     background-color: rgba(255, 0, 0, 0.8);
-    height: 3px;
+    height: 2px;
     box-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
   }
   .target-zone {
@@ -607,13 +607,14 @@
 } */
 
 @media (max-width: 640px) {
-  html, body {
+
+
+  html, body, #root {
+    height: 100%;
     margin: 0;
     padding: 0;
     overflow: hidden; /* Prevent scrolling */
-    height: 100%;
   }
-
   .billiard-table {
     height: 80vh; /* Full viewport height */
     width: 80vw;  /* Full viewport width */
@@ -631,7 +632,7 @@
   }
 
   .controls-container {
-    position: absolute;
+    position: fixed;
     bottom: 4px;
     width: 80%;
     margin: 0 auto;
@@ -642,7 +643,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    left: 40%;
+    left: 50%;
     transform: translateX(-50%);
     gap: 10px;
     z-index: 20;
@@ -661,7 +662,7 @@
   }
 
   .mobile-hide {
-    display: none; /* @apply hidden can't be used directly in CSS */
+    display: none; 
   }
 
   .zones-container {
@@ -696,7 +697,7 @@
   }
 
   .cue-ball {
-    top: 80%;
+    top: 60%;
     left: 50%;
     transform: translateX(-50%) rotate(-90deg);
   }
