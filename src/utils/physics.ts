@@ -122,8 +122,8 @@ export class BallPhysics {
 
     this.animate();
   }
+
   private animate(): void {
-    const startTime = performance.now();
     let allStopped = true;
 
     this.balls.forEach(ball => {
@@ -170,10 +170,6 @@ export class BallPhysics {
       return;
     }
 
-    const endTime = performance.now();
-    const deltaTime = endTime - startTime;
-    const frameRate = 1000 / deltaTime;
-
     this.animationFrameId = requestAnimationFrame(() => this.animate());
   }
 
@@ -219,99 +215,6 @@ export class BallPhysics {
       }
     }
   }
-
-  // private animate(): void {
-  //   let allStopped = true;
-
-  //   this.balls.forEach(ball => {
-  //     if (ball.stopped) return;
-
-  //     ball.velocity.x *= this.friction;
-  //     ball.velocity.y *= this.friction;
-  //     ball.position.x += ball.velocity.x;
-  //     ball.position.y += ball.velocity.y;
-
-  //     const energyLoss = 0.8;
-  //     if (ball.position.x <= 0) {
-  //       ball.position.x = 0;
-  //       ball.velocity.x = Math.abs(ball.velocity.x) * energyLoss;
-  //     } else if (ball.position.x >= this.tableRect.width - ball.width) {
-  //       ball.position.x = this.tableRect.width - ball.width;
-  //       ball.velocity.x = -Math.abs(ball.velocity.x) * energyLoss;
-  //     }
-
-  //     if (ball.position.y <= 0) {
-  //       ball.position.y = 0;
-  //       ball.velocity.y = Math.abs(ball.velocity.y) * energyLoss;
-  //     } else if (ball.position.y >= this.tableRect.height - ball.height) {
-  //       ball.position.y = this.tableRect.height - ball.height;
-  //       ball.velocity.y = -Math.abs(ball.velocity.y) * energyLoss;
-  //     }
-
-  //     if (Math.abs(ball.velocity.x) < 0.1 && Math.abs(ball.velocity.y) < 0.1) {
-  //       ball.stopped = true;
-  //     } else {
-  //       allStopped = false;
-  //     }
-  //   });
-
-  //   this.resolveCollisions();
-
-  //   this.balls.forEach(ball => {
-  //     this.updateBallPosition(ball);
-  //     if (!ball.stopped) allStopped = false;
-  //   });
-
-  //   if (allStopped) {
-  //     this.checkZone(this.balls[2]);
-  //     return;
-  //   }
-
-  //   this.animationFrameId = requestAnimationFrame(() => this.animate());
-  // }
-
-  // private resolveCollisions(): void {
-  //   for (let i = 0; i < this.balls.length; i++) {
-  //     for (let j = i + 1; j < this.balls.length; j++) {
-  //       const ball1 = this.balls[i];
-  //       const ball2 = this.balls[j];
-  //       const dx = (ball2.position.x + ball2.width/2) - (ball1.position.x + ball1.width/2);
-  //       const dy = (ball2.position.y + ball2.height/2) - (ball1.position.y + ball1.height/2);
-  //       const distance = Math.sqrt(dx * dx + dy * dy);
-  //       const minDistance = (ball1.width + ball2.width) / 2;
-
-  //       if (distance < minDistance) {
-  //         const nx = dx / distance;
-  //         const ny = dy / distance;
-  //         const tx = -ny;
-  //         const ty = nx;
-
-  //         const v1n = nx * ball1.velocity.x + ny * ball1.velocity.y;
-  //         const v1t = tx * ball1.velocity.x + ty * ball1.velocity.y;
-  //         const v2n = nx * ball2.velocity.x + ny * ball2.velocity.y;
-  //         const v2t = tx * ball2.velocity.x + ty * ball2.velocity.y;
-
-  //         const cor = 0.95;
-  //         const newV1n = v2n * cor;
-  //         const newV2n = v1n * cor;
-
-  //         ball1.velocity.x = newV1n * nx + v1t * tx;
-  //         ball1.velocity.y = newV1n * ny + v1t * ty;
-  //         ball2.velocity.x = newV2n * nx + v2t * tx;
-  //         ball2.velocity.y = newV2n * ny + v2t * ty;
-
-  //         const overlap = (minDistance - distance) / 2;
-  //         ball1.position.x -= nx * overlap;
-  //         ball1.position.y -= ny * overlap;
-  //         ball2.position.x += nx * overlap;
-  //         ball2.position.y += ny * overlap;
-
-  //         ball1.stopped = false;
-  //         ball2.stopped = false;
-  //       }
-  //     }
-  //   }
-  // }
 
   private updateBallPosition(ball: BallState): void {
     ball.element.style.left = `${ball.position.x}px`;

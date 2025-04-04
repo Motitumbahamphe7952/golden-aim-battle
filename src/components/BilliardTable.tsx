@@ -180,8 +180,8 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
               backgroundPosition: 'center center',
               backgroundSize: 'contain', // Optional: ensures it fills the div
               backgroundColor: 'transparent',
-              width: window.innerWidth < 768 ? '30px' : '50px',
-              height: window.innerWidth < 768 ? '30px' : '50px',
+              width: window.innerWidth < 768 ? '20px' : '50px',
+              height: window.innerWidth < 768 ? '20px' : '50px',
               borderRadius: '50%',
               zIndex: 5 // Ensure the cue ball is on top of the zones
             }}
@@ -193,8 +193,8 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
               backgroundPosition: 'center center',
               backgroundSize: 'cover', // Optional: ensures it fills the div
               backgroundColor: 'transparent',
-              width: window.innerWidth < 768 ? '40px' : '60px',
-            height: window.innerWidth < 768 ? '40px' : '60px',
+              width: window.innerWidth < 768 ? '20px' : '60px',
+            height: window.innerWidth < 768 ? '20px' : '60px',
               borderRadius: '50%',
               zIndex: 5 // Ensure the red ball is on top of the zones
             }}></div>
@@ -204,16 +204,16 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
               backgroundPosition: 'center center',
               backgroundSize: 'cover', // Optional: ensures it fills the div
               backgroundColor: 'transparent',
-              width: window.innerWidth < 768 ? '40px' : '60px',
-              height: window.innerWidth < 768 ? '40px' : '60px',
+              width: window.innerWidth < 768 ? '20px' : '60px',
+              height: window.innerWidth < 768 ? '20px' : '60px',
               borderRadius: '50%',
               zIndex: 5 // Ensure the red ball is on top of the zones
             }}></div>
-        <div ref={aimLineRef} className="aim-line absolute"  style={{
+        <div ref={aimLineRef} className="aim-line  absolute"  style={{
               backgroundImage: `url("/poolstick3d.png")`, 
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center center',
-              backgroundSize: 'cover', // Optional: ensures it fills the div
+              backgroundSize: 'contain', // Optional: ensures it fills the div
               backgroundColor: 'transparent',
               width: window.innerWidth < 768 ? '300px' : '120px',
               height: '10px',
