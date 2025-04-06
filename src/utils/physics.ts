@@ -34,6 +34,7 @@ interface BallState {
 }
 
 export class BallPhysics {
+  private borderWidth: number = 13; // Border width of the table
   private balls: BallState[];
   private table: HTMLElement;
   private tableRect: DOMRect;
@@ -47,6 +48,7 @@ export class BallPhysics {
   
   constructor(props: BallPhysicsProps) {
     this.table = props.table;
+    this.updateTableRect(); // Get initial table dimensions
     this.tableRect = this.table.getBoundingClientRect();
     this.friction = 0.98;
     this.onBallStop = props.onBallStop;
@@ -68,6 +70,12 @@ export class BallPhysics {
 
   public updateTableRect(): void {
     this.tableRect = this.table.getBoundingClientRect();
+    // Dynamically calculate border width from the billiard-border element
+    const borderElement = this.table.querySelector('.billiard-border');
+    if (borderElement) {
+      const computedStyle = window.getComputedStyle(borderElement);
+      this.borderWidth = parseFloat(computedStyle.borderLeftWidth);
+    }
   }
 
   public reset(): void {
@@ -75,29 +83,24 @@ export class BallPhysics {
       cancelAnimationFrame(this.animationFrameId);
       this.animationFrameId = null;
     }
-    
-    this.updateTableRect();
-    
-    const tableWidth = this.tableRect.width;
-    const tableHeight = this.tableRect.height;
+  
+    this.updateTableRect(); // Recalculate tableRect and borderWidth
+  
+    const innerWidth = this.tableRect.width - 2 * this.borderWidth;
+    const innerHeight = this.tableRect.height - 2 * this.borderWidth;
     const ballWidth = this.balls[0].width;
-    const minX = 0;
-    const maxX = tableWidth - ballWidth;
+  
+    // Random X position within inner boundaries
+    const minX = this.borderWidth;
+    const maxX = innerWidth - ballWidth + this.borderWidth;
     const randomX = Math.random() * (maxX - minX) + minX;
   
+    // Position balls vertically within inner boundaries
     this.balls.forEach((ball, index) => {
-      if (index === 0) {
-        ball.position = {
-          x: randomX,
-          y: tableHeight * 0.8  // Start from bottom 20% of the table
-        };
-      } else {
-        ball.position = {
-          x: randomX,
-          y: tableHeight * 0.8 - index * this.verticalOffset  // Stack vertically upward
-        };
-      }
-      
+      ball.position = {
+        x: randomX,
+        y: innerHeight * 0.8 + this.borderWidth - index * this.verticalOffset
+      };
       ball.velocity = { x: 0, y: 0 };
       ball.stopped = true;
       this.updateBallPosition(ball);
@@ -125,92 +128,105 @@ export class BallPhysics {
     this.animate();
   }
 
+
   private animate(): void {
+
     let allStopped = true;
 
     this.balls.forEach(ball => {
       if (ball.stopped) return;
-
+  
+      // Apply friction
       ball.velocity.x *= this.friction;
       ball.velocity.y *= this.friction;
       ball.position.x += ball.velocity.x;
       ball.position.y += ball.velocity.y;
-
+  
+      // Boundary collision detection (inner edges)
       const energyLoss = 0.8;
-      if (ball.position.x <= 0) {
-        ball.position.x = 0;
-        ball.velocity.x = Math.abs(ball.velocity.x) * energyLoss;
-      } else if (ball.position.x >= this.tableRect.width - ball.width) {
-        ball.position.x = this.tableRect.width - ball.width;
-        ball.velocity.x = -Math.abs(ball.velocity.x) * energyLoss;
+      const innerWidth = this.tableRect.width - 2 * this.borderWidth;
+      const innerHeight = this.tableRect.height - 2 * this.borderWidth;
+  
+      // Left boundary (inner)
+      if (ball.position.x <= this.borderWidth) {
+        ball.position.x = this.borderWidth;
+        ball.velocity.x = -ball.velocity.x * energyLoss;
       }
-
-      if (ball.position.y <= 0) {
-        ball.position.y = 0;
-        ball.velocity.y = Math.abs(ball.velocity.y) * energyLoss;
-      } else if (ball.position.y >= this.tableRect.height - ball.height) {
-        ball.position.y = this.tableRect.height - ball.height;
-        ball.velocity.y = -Math.abs(ball.velocity.y) * energyLoss;
+      // Right boundary (inner)
+      else if (ball.position.x + ball.width >= innerWidth + this.borderWidth) {
+        ball.position.x = innerWidth + this.borderWidth - ball.width;
+        ball.velocity.x = -ball.velocity.x * energyLoss;
       }
-
+  
+      // Top boundary (inner)
+      if (ball.position.y <= this.borderWidth) {
+        ball.position.y = this.borderWidth;
+        ball.velocity.y = -ball.velocity.y * energyLoss;
+      }
+      // Bottom boundary (inner)
+      else if (ball.position.y + ball.height >= innerHeight + this.borderWidth) {
+        ball.position.y = innerHeight + this.borderWidth - ball.height;
+        ball.velocity.y = -ball.velocity.y * energyLoss;
+      }
+  
+      // Check if the ball has stopped
       if (Math.abs(ball.velocity.x) < 0.1 && Math.abs(ball.velocity.y) < 0.1) {
         ball.stopped = true;
       } else {
         allStopped = false;
       }
     });
-
-    this.resolveCollisions();
-
+  
+    this.resolveCollisions(); // Handle ball-to-ball collisions
+  
     this.balls.forEach(ball => {
       this.updateBallPosition(ball);
-      if (!ball.stopped) allStopped = false;
     });
-
+  
     if (allStopped) {
-      this.checkZone(this.balls[2]);
+      this.checkZone(this.balls[2]); // Check final position
       return;
     }
-
+  
     this.animationFrameId = requestAnimationFrame(() => this.animate());
   }
+
 
   private resolveCollisions(): void {
     for (let i = 0; i < this.balls.length; i++) {
       for (let j = i + 1; j < this.balls.length; j++) {
         const ball1 = this.balls[i];
         const ball2 = this.balls[j];
-        const dx = (ball2.position.x + ball2.width/2) - (ball1.position.x + ball1.width/2);
-        const dy = (ball2.position.y + ball2.height/2) - (ball1.position.y + ball1.height/2);
+  
+        // Calculate distance between ball centers
+        const dx = (ball2.position.x + ball2.width / 2) - (ball1.position.x + ball1.width / 2);
+        const dy = (ball2.position.y + ball2.height / 2) - (ball1.position.y + ball1.height / 2);
         const distance = Math.sqrt(dx * dx + dy * dy);
         const minDistance = (ball1.width + ball2.width) / 2;
-
+  
+        // Check if balls are colliding
         if (distance < minDistance) {
+          // Normalize collision vector
           const nx = dx / distance;
           const ny = dy / distance;
-          const tx = -ny;
-          const ty = nx;
-
-          const v1n = nx * ball1.velocity.x + ny * ball1.velocity.y;
-          const v1t = tx * ball1.velocity.x + ty * ball1.velocity.y;
-          const v2n = nx * ball2.velocity.x + ny * ball2.velocity.y;
-          const v2t = tx * ball2.velocity.x + ty * ball2.velocity.y;
-
-          const cor = 0.95;
-          const newV1n = v2n * cor;
-          const newV2n = v1n * cor;
-
-          ball1.velocity.x = newV1n * nx + v1t * tx;
-          ball1.velocity.y = newV1n * ny + v1t * ty;
-          ball2.velocity.x = newV2n * nx + v2t * tx;
-          ball2.velocity.y = newV2n * ny + v2t * ty;
-
+  
+          // Calculate impulse (elastic collision)
+          const cor = 0.95; // Coefficient of restitution (bounciness)
+          const impulse = (2 * (ball1.velocity.x * nx + ball1.velocity.y * ny - ball2.velocity.x * nx - ball2.velocity.y * ny)) / 2;
+  
+          // Apply impulse
+          ball1.velocity.x -= impulse * nx * cor;
+          ball1.velocity.y -= impulse * ny * cor;
+          ball2.velocity.x += impulse * nx * cor;
+          ball2.velocity.y += impulse * ny * cor;
+  
+          // Separate overlapping balls
           const overlap = (minDistance - distance) / 2;
           ball1.position.x -= nx * overlap;
           ball1.position.y -= ny * overlap;
           ball2.position.x += nx * overlap;
           ball2.position.y += ny * overlap;
-
+  
           ball1.stopped = false;
           ball2.stopped = false;
         }
@@ -324,30 +340,26 @@ export class AimingSystem {
     return this.isAimLocked;
   }
 
-  private updateAimLine(event: MouseEvent): void {
-    const tableRect = this.table.getBoundingClientRect();
-    const ballRect = this.ball.getBoundingClientRect();
-    
-    const ballCenterX = ballRect.left - tableRect.left + ballRect.width / 2;
-    const ballCenterY = ballRect.top - tableRect.top + ballRect.height / 2;
-    
-    const mouseX = event.clientX - tableRect.left;
-    const mouseY = event.clientY - tableRect.top;
 
+  private updateAimLine(event: MouseEvent): void {
+    const ballRect = this.ball.getBoundingClientRect(); // Get viewport position
+    const ballCenterX = ballRect.left + ballRect.width / 2;
+    const ballCenterY = ballRect.top + ballRect.height / 2;
+    
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+  
     const dx = mouseX - ballCenterX;
     const dy = mouseY - ballCenterY;
     this.angle = Math.atan2(dy, dx) * 180 / Math.PI;
-
-    // const length = Math.min(Math.sqrt(dx*dx + dy*dy), this.maxLength);
-    const length = Math.sqrt(dx*dx + dy*dy) + 100;
-
+  
+    const length = Math.sqrt(dx * dx + dy * dy) + 100;
+  
     this.aimLine.style.width = `${length}px`;
     this.aimLine.style.left = `${ballCenterX}px`;
     this.aimLine.style.top = `${ballCenterY}px`;
     this.aimLine.style.transform = `rotate(${this.angle}deg)`;
     this.aimLine.style.transformOrigin = 'left center';
-
-    this.aimLine.style.transform += ' translateZ(0)';
   }
 
   public getAngle(): number {

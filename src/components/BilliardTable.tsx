@@ -122,7 +122,83 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
     }
   }, [shootTrigger, physics, aiming, power, onShootComplete]);
 
+
+  useEffect(() => {
+    if (shootTrigger && physics && aiming && aimLineRef.current) {
+      const aimLine = aimLineRef.current;
+  
+      // Lock aiming during animation
+      aiming.lockAim();
+  
+      const animate = async () => {
+        // Pull back (no rotate here)
+        aimLine.style.transition = 'transform 0.1s ease-out';
+        aimLine.style.transform += ' translateX(-30px)';
+  
+        await new Promise(resolve => setTimeout(resolve, 100));
+  
+        // Push forward
+        aimLine.style.transition = 'transform 0.05s linear';
+        aimLine.style.transform = aimLine.style.transform.replace('translateX(-30px)', 'translateX(50px)');
+  
+        await new Promise(resolve => setTimeout(resolve, 50));
+  
+        // Shoot the ball
+        physics.shoot(aiming.getAngle(), power);
+  
+        await new Promise(resolve => setTimeout(resolve, 300));
+  
+        onShootComplete();
+  
+        // Reset styles
+        aimLine.style.transition = '';
+        aimLine.style.transform = `rotate(${aiming.getAngle()}deg)`; // restore original
+        aiming.reset();
+      };
+  
+      animate();
+    }
+  }, [shootTrigger, physics, aiming, power, onShootComplete]);
+  
+  // In BilliardTable.tsx
+// useEffect(() => {
+//   if (shootTrigger && physics && aiming && aimLineRef.current) {
+//     const aimLine = aimLineRef.current;
+//     const angle = aiming.getAngle();
+    
+//     // Lock aiming during animation
+//     aiming.lockAim();
+    
+//     // Animation sequence
+//     const animate = async () => {
+//       // Pull back
+//       aimLine.style.transition = 'transform 0.1s ease-out';
+//       aimLine.style.transform = `rotate(${angle}deg) translateX(-30px)`;
+      
+//       await new Promise(resolve => setTimeout(resolve, 100));
+      
+//       // Push forward
+//       aimLine.style.transition = 'transform 0.05s linear';
+//       aimLine.style.transform = `rotate(${angle}deg) translateX(50px)`;
+      
+//       await new Promise(resolve => setTimeout(resolve, 50));
+      
+//       // Execute shot
+//       physics.shoot(angle, power);
+//       onShootComplete();
+      
+//       // Reset styles
+//       aimLine.style.transition = '';
+//       aimLine.style.transform = '';
+//       aiming.reset();
+//     };
+
+//     animate();
+//   }
+// }, [shootTrigger, physics, aiming, power, onShootComplete]);
+
   return (
+    <div className="billiard-table-wrapper relative">
     <div className="billiard-table">
       <div className="vignette-overlay">
       <div className="billiard-inner" 
@@ -215,7 +291,9 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
             }}></div>
             
       </div>
-      <div ref={aimLineRef} className="aim-line  absolute"  style={{
+      </div>
+      </div>
+      <div ref={aimLineRef} className="aim-line fixed overflow-visible"  style={{
               backgroundImage: `url("/poolstick3d.png")`, 
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center center',
@@ -224,9 +302,8 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
               width: window.innerWidth < 768 ? '300px' : '120px',
               height: '10px',
               zIndex: 20 // Ensure the aim line is on top of the zones
+              
             }}></div>
-      </div>
-      
     </div>
   );
 };
