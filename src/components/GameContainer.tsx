@@ -58,8 +58,8 @@ const GameContainer: React.FC = () => {
   };
 
   return (
-    <div>
-    <div className={`${isMobile ? 'mt-[-120px] w-full h-full overflow-hidden' : 'max-w-4xl w-full mx-auto my-auto px-2 sm:px-4'} animate-fade-in flex flex-col items-center`}>
+    <div className="flex flex-col h-screen">
+    {/* <div className={`${isMobile ? 'mt-[-120px] w-full h-full overflow-hidden' : 'max-w-4xl w-full mx-auto my-auto px-2 sm:px-4'} animate-fade-in flex flex-col items-center`}>
       <div  onDoubleClick={handleDoubleClick}>
         <BilliardTable
           key={gameKey}
@@ -68,7 +68,20 @@ const GameContainer: React.FC = () => {
           shootTrigger={shootTrigger}
           onShootComplete={handleShootComplete}
         />
-      </div>
+      </div> */}
+      <div className={`${isMobile ? 'w-full flex-1 mt-[-120px]' : 'max-w-4xl w-full mx-auto my-auto px-2 sm:px-4'} animate-fade-in flex flex-col items-center`}>
+        <div 
+          className="w-full h-full flex items-center justify-center"
+          onDoubleClick={handleDoubleClick}
+        >
+          <BilliardTable
+            key={gameKey}
+            onBallStop={handleBallStop}
+            power={power}
+            shootTrigger={shootTrigger}
+            onShootComplete={handleShootComplete}
+          />
+        </div>
      
 
       <div className="text-center mt-4 text-sm text-gray-300 mobile-hide">
@@ -92,7 +105,13 @@ const GameContainer: React.FC = () => {
         </DialogContent>
       </Dialog>
     </div>
-    <div className={`${isMobile ? 'absolute bottom-4 w-full px-4' : 'w-full sm:w-auto px-4 mt-2 sm:mt-6'}`}>
+    {/* <div className={`${isMobile ? 'absolute bottom-4 w-full px-4' : 'w-full sm:w-auto px-4 mt-2 sm:mt-6'}`}>
+        <Controls
+          onShoot={handleShoot}
+          disabled={isPlaying}
+        />
+      </div> */}
+      <div className={`${isMobile ? 'w-full p-4' : 'w-full sm:w-auto px-4 mt-2 sm:mt-6'}`}>
         <Controls
           onShoot={handleShoot}
           disabled={isPlaying}

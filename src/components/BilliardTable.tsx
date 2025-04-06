@@ -135,13 +135,13 @@ const BilliardTable: React.FC<BilliardTableProps> = ({
         aimLine.style.transition = 'transform 0.1s ease-out';
         aimLine.style.transform += ' translateX(-30px)';
   
-        await new Promise(resolve => setTimeout(resolve, 100));
+        // await new Promise(resolve => setTimeout(resolve, 100));
   
         // Push forward
         aimLine.style.transition = 'transform 0.05s linear';
         aimLine.style.transform = aimLine.style.transform.replace('translateX(-30px)', 'translateX(50px)');
   
-        await new Promise(resolve => setTimeout(resolve, 50));
+        // await new Promise(resolve => setTimeout(resolve, 50));
   
         // Shoot the ball
         physics.shoot(aiming.getAngle(), power);
